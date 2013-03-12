@@ -1,0 +1,636 @@
+/*
+ * Samsung TTS
+ * Copyright 2012  Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "SMTApis.h"
+
+#include "_SlpSmtApis.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <pthread.h>
+
+
+
+
+#define PCM_BUFFER_SIZE    640000
+
+// Not supported yet {
+#define TTSPE_LANG_CANTONESE    "zh_HK"
+#define TTSPE_LANG_TAIWAN       "zh_TW"
+#define TTSPE_LANG_RUSSIAN      "ru_RU"
+#define TTSPE_LANG_JAPANESE     "ja_JP"
+#define TTSPE_LANG_NETHERLANDS  "nl_NL"
+#define TTSPE_LANG_PORTUGUESE   "pt_PT"
+#define TTSPE_LANG_GREEK        "el_GR"
+#define TTSPE_LANG_TURKEY       "tr_TR"
+// Not supported yet }
+
+
+
+
+
+
+
+
+
+
+typedef struct __TypeVoiceInfo _TypeVoiceInfo;
+struct __TypeVoiceInfo
+{
+  char const         * const pszLanguage;
+  unsigned int          const sszLanguage;
+  ttsp_voice_type_e const eVoiceType;
+
+};
+
+
+static char const _pszKorean              [] = "ko_KR";
+static char const _pszUSEnglish           [] = "en_US";
+static char const _pszChinese             [] = "zh_CN";
+
+
+static char const _pszUKEnglish           [] = "en_GB";
+static char const _pszGerman              [] = "de_DE";
+static char const _pszSpanish             [] = "es_ES";
+static char const _pszFrench              [] = "fr_FR";
+static char const _pszItalian             [] = "it_IT";
+
+static unsigned int const _sszKorean                 = sizeof(_pszKorean);
+static unsigned int const _sszUSEnglish              = sizeof(_pszUSEnglish);
+static unsigned int const _sszChinese                = sizeof(_pszChinese);
+static unsigned int const _sszUKEnglish              = sizeof(_pszUKEnglish);
+static unsigned int const _sszGerman                 = sizeof(_pszGerman);
+static unsigned int const _sszSpanish                = sizeof(_pszSpanish);
+static unsigned int const _sszFrench                 = sizeof(_pszFrench);
+static unsigned int const _sszItalian                = sizeof(_pszItalian);
+
+
+static const _TypeVoiceInfo _pVoiceInfos[] =
+{
+  { _pszKorean              , _sszKorean              , TTSP_VOICE_TYPE_FEMALE },
+  { _pszUSEnglish           , _sszUSEnglish           , TTSP_VOICE_TYPE_FEMALE },
+  { _pszChinese             , _sszChinese             , TTSP_VOICE_TYPE_FEMALE },
+
+  { _pszUKEnglish           , _sszUKEnglish           , TTSP_VOICE_TYPE_FEMALE },
+  { _pszGerman              , _sszGerman              , TTSP_VOICE_TYPE_FEMALE },
+  { _pszSpanish             , _sszSpanish             , TTSP_VOICE_TYPE_FEMALE },
+  { _pszFrench              , _sszFrench              , TTSP_VOICE_TYPE_FEMALE },
+  { _pszItalian             , _sszItalian             , TTSP_VOICE_TYPE_FEMALE },
+};
+
+#define _nVoiceInfos   (sizeof(_pVoiceInfos) / sizeof(_pVoiceInfos[0]))
+
+// index of VoiceInfos
+#define VOICE_INDEX_KOREAN_WOMAN         0
+#define VOICE_INDEX_USENGLISH_WOMAN       1
+#define VOICE_INDEX_CHINESE_WOMAN          2
+#define VOICE_INDEX_UKENGLISH_WOMAN        3
+#define VOICE_INDEX_GERMAN_WOMAN           4
+#define VOICE_INDEX_SPANISH_WOMAN          5
+#define VOICE_INDEX_FRENCH_WOMAN           6
+#define VOICE_INDEX_ITALIAN_WOMAN          7
+
+
+
+
+typedef struct _TypeThreadQueueNode TypeThreadQueueNode;
+struct _TypeThreadQueueNode
+{
+  int                   iVoiceInfo;
+  char                * pszTextUtf8;
+  void                * pUserParam;
+  TypeThreadQueueNode * pNext;
+};
+
+static struct _global
+{
+  ttspe_result_cb      pfnCallback;
+  ttsp_speed_e        eSpeechSpeed;
+  int                  iVoiceInfo;
+  bool                 bStop;
+  bool                 bSentenceDone;
+
+  // thread
+  int                  ThreadId;
+  pthread_t            Thread;
+  pthread_mutex_t      ThreadLock;
+  pthread_mutex_t      MainThreadFinalizeLock;
+  TypeThreadQueueNode* ThreadQueue_pHead;
+  TypeThreadQueueNode* ThreadQueue_pTail;
+
+} _g =
+{
+  NULL                     , // pfnCallback
+
+  TTSP_SPEED_NORMAL       , // eSpeechSpeed
+  -1                       , // iVoiceInfo, initial value means INVALID INDEX
+  false                    , // bStop
+  true                     , // bSentenceDone
+
+  -1                       , // ThreadId
+  0                        , // Thread
+  PTHREAD_MUTEX_INITIALIZER, // ThreadLock
+  PTHREAD_MUTEX_INITIALIZER, // MainThreadFinalizeLock
+  NULL                     , // ThreadQueue_pHead
+  NULL                     , // ThreadQueue_pTail
+};
+
+static void                 _PushThreadData (int const iVoiceInfo, char const * pszTextUtf8, void* pUserParam);
+static TypeThreadQueueNode* _PopThreadData  (void);
+static bool                 _bEmptyThreadData(void);
+static void                 _CleanThreadData(void);
+static void *               _Synthesize     (void* NotUsed); // Thread routine
+
+
+static int  _ChangeVoice         (int const iVoiceInfo);
+static void _SetSpeechSpeed      (void);
+static void _CallBack            (ttsp_result_event_e eEvent, unsigned int const nPCMs, void * pPCMs, void* pUserParam);
+static int _Synthesize_SamsungTTS(char const * const pszTextUtf8, void* pUserParam, int const FramePeriod);
+
+
+
+
+char const * SLPSMT_GetPszKorean              (void) { return _pszKorean              ; }
+char const * SLPSMT_GetPszUSEnglish           (void) { return _pszUSEnglish           ; }
+char const * SLPSMT_GetPszChinese             (void) { return _pszChinese             ; }
+char const * SLPSMT_GetPszUKEnglish           (void) { return _pszUKEnglish           ; }
+char const * SLPSMT_GetPszGerman              (void) { return _pszGerman              ; }
+char const * SLPSMT_GetPszSpanish             (void) { return _pszSpanish             ; }
+char const * SLPSMT_GetPszFrench              (void) { return _pszFrench              ; }
+char const * SLPSMT_GetPszItalian             (void) { return _pszItalian             ; }
+
+int          SLPSMT_GetWorkingThreadId(void) { return _g.ThreadId; }
+
+
+
+
+int SLPSMT_StopSynthesis(void)
+{
+  printf(">> SLPSMT_StopSynthesis()\n");
+  _g.bStop         = true;
+  _g.bSentenceDone = true;
+  _CleanThreadData();
+  return TTSP_ERROR_NONE;
+}
+
+int SLPSMT_SynthesizeText(int const iVoiceInfo, char const * pszTextUtf8, void * const pUserParam)
+{
+  if (! _g.pfnCallback)                { return TTSP_ERROR_INVALID_STATE; }
+  if (! pszTextUtf8 || ! *pszTextUtf8) { return TTSP_ERROR_INVALID_PARAMETER; }
+
+  printf(">> SLPSMT_SynthesizeText()\n");
+  printf(">>>> iVoiceInfo  : %d\n", iVoiceInfo );
+  printf(">>>> pszTextUtf8 : %s\n", pszTextUtf8);
+
+  _g.bStop = false;
+
+  _PushThreadData(iVoiceInfo, pszTextUtf8, pUserParam);
+
+  if (_g.ThreadId < 0)
+  {
+    _g.ThreadId = pthread_create(& _g.Thread, NULL, _Synthesize, pUserParam);
+    if (_g.ThreadId < 0)
+    {
+      printf(">>>  Fail to create thread\n");
+      return TTSP_ERROR_OPERATION_FAILED;
+    }
+  }
+  return TTSP_ERROR_NONE;
+}
+
+
+
+
+
+
+
+ttspe_voice_info_s * _gpVoiceInfos  = NULL;
+
+int SLPSMT_SetVoiceList(ttspe_voice_list_s * p)
+{
+  if (! _gpVoiceInfos)
+  {
+    unsigned int i;
+
+    _gpVoiceInfos = (ttspe_voice_info_s*) calloc(_nVoiceInfos, sizeof(ttspe_voice_info_s));
+    if (! _gpVoiceInfos) { return TTSP_ERROR_OUT_OF_MEMORY; }
+
+    for (i=0 ; i<_nVoiceInfos ; i++)
+    {
+      _gpVoiceInfos[i].lang   = strdup(_pVoiceInfos[i].pszLanguage);
+      _gpVoiceInfos[i].vctype =        _pVoiceInfos[i].eVoiceType  ;
+    }
+  }
+  p->voice_info = _gpVoiceInfos;
+  p->size       = _nVoiceInfos;
+  return TTSP_ERROR_NONE;
+}
+
+void SLPSMT_SetSpeechSpeed(ttsp_speed_e const eSpeechSpeed)
+{
+  switch (eSpeechSpeed)
+  {
+    case TTSP_SPEED_VERY_FAST :
+    case TTSP_SPEED_FAST      :
+    case TTSP_SPEED_SLOW      :
+    case TTSP_SPEED_VERY_SLOW :
+    case TTSP_SPEED_NORMAL    : _g.eSpeechSpeed = eSpeechSpeed;       break;
+    default                    : _g.eSpeechSpeed = TTSP_SPEED_NORMAL; break;
+  }
+}
+
+int SLPSMT_GetiVoiceInfo(char* const pszLanguage, ttsp_voice_type_e const eVoiceType)
+{
+  int i;
+  for (i=0 ; i<_nVoiceInfos ; i++)
+  {
+    if (             eVoiceType == _pVoiceInfos[i].eVoiceType
+        && ! strcmp(pszLanguage ,  _pVoiceInfos[i].pszLanguage)
+    )
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int SLPSMT_Initialize(ttspe_result_cb pfnCallBack)
+{
+  if (pfnCallBack)
+  {
+    _g.pfnCallback = pfnCallBack;
+    return TTSP_ERROR_NONE;
+  }
+  return TTSP_ERROR_INVALID_STATE;
+}
+
+int SLPSMT_Finalize(void)
+{
+  printf(">>>> SLPSMT_Finalize() called.\n");
+
+  _g.bStop = true;
+  _CleanThreadData();
+
+  pthread_mutex_lock  (& _g.MainThreadFinalizeLock);       // <---- lock
+  SMTFinalize();
+  pthread_mutex_unlock(& _g.MainThreadFinalizeLock);       // <---- unlock
+
+  if (_gpVoiceInfos)
+  {
+    unsigned int i;
+    for (i=0 ; i<_nVoiceInfos ; i++)
+    {
+      if (_gpVoiceInfos[i].lang) { free(_gpVoiceInfos[i].lang); }
+    }
+    free(_gpVoiceInfos);
+  }
+
+  _g.pfnCallback  = NULL;
+  _g.eSpeechSpeed = TTSP_SPEED_NORMAL;
+  _g.iVoiceInfo   = -1;
+  _g.ThreadId     = -1;
+
+  printf(">>>> SLPSMT_Finalize() returns.\n");
+  return TTSP_ERROR_NONE;
+}
+
+
+
+
+static void _PushThreadData(int const iVoiceInfo, char const * pszTextUtf8, void* pUserParam)
+// iVoiceInfo  should be correct.
+// pszTextUtf8 should not be NULL.
+{
+  bool   b = false;
+  char * pszDuplicatedTextUtf8;
+
+  pthread_mutex_lock  (& _g.ThreadLock);       // <---- lock
+
+  pszDuplicatedTextUtf8 = strdup(pszTextUtf8);
+  if (pszDuplicatedTextUtf8)
+  {
+    TypeThreadQueueNode* p = (TypeThreadQueueNode*) calloc (1, sizeof(TypeThreadQueueNode));
+    if (p)
+    {
+      p->iVoiceInfo  = iVoiceInfo;
+      p->pszTextUtf8 = pszDuplicatedTextUtf8;
+      p->pUserParam  = pUserParam;
+      if (! _g.ThreadQueue_pHead) { _g.ThreadQueue_pHead        = p; }
+      if (  _g.ThreadQueue_pTail) { _g.ThreadQueue_pTail->pNext = p; }
+      _g.ThreadQueue_pTail = p;
+      b = true;
+    }
+
+    if (! b) { free(pszDuplicatedTextUtf8); }
+  }
+
+  if (! b) { printf(">>>__PushThreadData, out of memory\n"); }
+
+  pthread_mutex_unlock(& _g.ThreadLock);       // <---- unlock
+}
+
+static TypeThreadQueueNode* _PopThreadData(void)
+{
+  TypeThreadQueueNode* p;
+
+  pthread_mutex_lock  (& _g.ThreadLock);       // <---- lock
+
+  p = _g.ThreadQueue_pHead;
+  if (_g.ThreadQueue_pHead) { _g.ThreadQueue_pHead = _g.ThreadQueue_pHead->pNext; }
+  if (p == _g.ThreadQueue_pTail) { _g.ThreadQueue_pTail = NULL; }
+
+  pthread_mutex_unlock(& _g.ThreadLock);       // <---- unlock
+
+  return p;
+}
+
+static bool _bEmptyThreadData(void)
+{
+  bool b = true;
+  pthread_mutex_lock  (& _g.ThreadLock);       // <---- lock
+
+  if (_g.ThreadQueue_pHead) { b = false; }
+
+  pthread_mutex_unlock(& _g.ThreadLock);       // <---- unlock
+  return b;
+}
+
+
+static void _CleanThreadData(void)
+{
+  pthread_mutex_lock  (& _g.ThreadLock);       // <---- lock
+
+  while (_g.ThreadQueue_pHead)
+  {
+    TypeThreadQueueNode* const p = _g.ThreadQueue_pHead;
+    _g.ThreadQueue_pHead = p->pNext;
+    free(p->pszTextUtf8);
+    free(p);
+  }
+  _g.ThreadQueue_pHead = NULL;
+  _g.ThreadQueue_pTail = NULL;
+
+  pthread_mutex_unlock(& _g.ThreadLock);       // <---- unlock
+}
+
+static void * _Synthesize(void* NotUsed)
+{
+  unsigned int const FramePeriod = (unsigned int) SMTGetFramePeriod();
+  TypeThreadQueueNode* p = _PopThreadData();
+
+  for ( ; p ; p=_PopThreadData())
+  {
+    int  const   iVoiceInfo  = p->iVoiceInfo;
+    char const * pszTextUtf8 = p->pszTextUtf8;
+    void       * pUserParam  = p->pUserParam;
+
+    if (_g.pfnCallback)
+    {
+      int r = SMT_SUCCESS;
+
+      printf(">>>> Thread, _Synthesize(), iVoiceInfo = %d\n", iVoiceInfo);
+      printf(">>>>>> pszTextUtf8 = %s\n", pszTextUtf8);
+
+      if (iVoiceInfo != _g.iVoiceInfo)
+      {
+        r = _ChangeVoice(iVoiceInfo);
+        printf(">>>>>> iVoiceInfo was changed.\n");
+      }
+
+      if (r == SMT_SUCCESS)
+      {
+        _SetSpeechSpeed();
+
+        printf(">>>>>> Set speech-speed\n");
+
+        pthread_mutex_lock  (& _g.MainThreadFinalizeLock);       // <---- lock
+
+        r = _Synthesize_SamsungTTS(pszTextUtf8, pUserParam, FramePeriod);
+
+        pthread_mutex_unlock(& _g.MainThreadFinalizeLock);       // <---- unlock
+
+      }
+      printf(">>>Thread, _Synthesize() done\n");
+    }
+
+    free(p->pszTextUtf8);
+    free(p);
+  } // end of while loop
+
+  _g.ThreadId = -1;
+  return (void*) 1;
+}
+
+//
+// END
+//
+// functions managing < Thread Queue >
+//
+
+
+
+
+
+
+
+
+//
+// functions managing < Engine Switching >
+//
+// BEGIN
+//
+
+static int _ChangeVoice(int const iVoiceInfo)
+{
+  int          r;
+  bool         bSamsungTTS = false;
+  bool         bSvoxTTS    = false;
+  char const * pszLanguage = NULL;
+  char const * pszContury  = NULL;
+
+   switch (iVoiceInfo)
+  {
+    case VOICE_INDEX_KOREAN_WOMAN    		: SMTSet_Language(eKOREAN              ,  1, 0);              	break;
+    case VOICE_INDEX_USENGLISH_WOMAN      	: SMTSet_Language(eUSENGLISH           ,  1, 0);          		break;
+    case VOICE_INDEX_CHINESE_WOMAN          	: SMTSet_Language(eCHINESE             ,  1, 0);	              break;
+
+    case VOICE_INDEX_UKENGLISH_WOMAN 		: SMTSet_Language(eGBENGLISH          ,  1, 0);			break;
+    case VOICE_INDEX_GERMAN_WOMAN    		: SMTSet_Language(eGERMAN              ,  1, 0);			break;
+    case VOICE_INDEX_SPANISH_WOMAN   		: SMTSet_Language(eSPANISH             ,  1, 0);			break;
+    case VOICE_INDEX_FRENCH_WOMAN    		: SMTSet_Language(eFRENCH              ,  1, 0);			break;
+    case VOICE_INDEX_ITALIAN_WOMAN   			: SMTSet_Language(eITALIAN              ,  1, 0);			break;
+
+    default : break; // This case has already been checked.
+  }
+
+  _g.iVoiceInfo = iVoiceInfo;
+
+    SMTFinalize();
+    r = SMTInitialize();
+
+  if (r != SMT_SUCCESS) { printf(">>>  _ChangeVoice() returns %d.\n", r); }
+
+  return r;
+}
+
+static void _SetSpeechSpeed(void)
+{
+    switch (_g.eSpeechSpeed)
+    {
+      case TTSP_SPEED_VERY_FAST : SMTSetSpeechSpeed(eSMTSpeechSpeed_VeryFast);  break;
+      case TTSP_SPEED_FAST      : SMTSetSpeechSpeed(eSMTSpeechSpeed_Fast    );  break;
+      case TTSP_SPEED_SLOW      : SMTSetSpeechSpeed(eSMTSpeechSpeed_Slow    );  break;
+      case TTSP_SPEED_VERY_SLOW : SMTSetSpeechSpeed(eSMTSpeechSpeed_VerySlow);  break;
+      case TTSP_SPEED_NORMAL    : SMTSetSpeechSpeed(eSMTSpeechSpeed_Normal  );  break;
+    }
+}
+
+static void _CallBack(ttsp_result_event_e eEvent, unsigned int const nPCMs, void * pPCMs, void* pUserParam)
+{
+  unsigned int const n = nPCMs * sizeof(short);
+
+
+  printf(">>>  callback, pUserParam = 0x%x\n", (unsigned int) pUserParam);
+  printf(">>>  callback, event=");
+
+  switch (eEvent)
+  {
+    case TTSP_RESULT_EVENT_CONTINUE :
+      if (_g.bSentenceDone)
+      {
+        eEvent = TTSP_RESULT_EVENT_START;
+        _g.bSentenceDone = false;
+      }
+      break;
+
+    case TTSP_RESULT_EVENT_FINISH :
+      _g.bSentenceDone = true;
+      break;
+  }
+
+#if 1
+  if (nPCMs)
+  {
+    static int iWave = 0;
+    static char pszWave[100];
+
+    printf("@@@ saving wave file @@@\n");
+    sprintf(pszWave, "/mnt/nfs/tts/play%d.wav", iWave++);
+    SMTSaveWave(pszWave, (short*) pPCMs, nPCMs * 2);
+  }
+#endif
+
+  switch (eEvent)
+  {
+    case TTSP_RESULT_EVENT_START   : printf("TTSPE_CBEVENT_SYNTH_START\n");     break;
+    case TTSP_RESULT_EVENT_CONTINUE: printf("TTSPE_CBEVENT_SYNTH_CONTINUE\n");  break;
+    case TTSP_RESULT_EVENT_FINISH  : printf("TTSPE_CBEVENT_SYNTH_FINISH\n");    break;
+    case TTSP_RESULT_EVENT_CANCEL  : printf("TTSPE_CBEVENT_SYNTH_CANCEL\n");    break;
+    case TTSP_RESULT_EVENT_FAIL    : printf("TTSPE_CBEVENT_SYNTH_FAIL\n");      break;
+    default                          : printf("invalid\n");                       break;
+  }
+
+  if (eEvent==TTSP_RESULT_EVENT_FINISH && ! _bEmptyThreadData())
+  {
+    printf(">>> There is another input text.\n");
+    printf(">>> TTSPE_CBEVENT_SYNTH_FINISH was chanage into TTSPE_CBEVENT_SYNTH_CONTINUE.\n");
+    eEvent = TTSP_RESULT_EVENT_CONTINUE;
+  }
+
+  printf(">>> data size = %d\n", n);
+  printf(">> >> Here we jump into the callback function.\n");
+
+  int const cbreturn = _g.pfnCallback(eEvent, pPCMs, n, pUserParam);
+  printf(">> >> Here we return from the callback function.\n");
+  printf(">> >> callback function return value = %d\n", cbreturn);
+  if (-1 == cbreturn)
+  {
+    printf(">>> Callback function returns TTS_CALLBACK_HALT.\n");
+    _g.bStop         = true;
+    _g.bSentenceDone = true;
+  }
+}
+
+static int _Synthesize_SamsungTTS(char const * const pszTextUtf8, void* pUserParam, int const FramePeriod)
+{
+  static short pPcmBuffer[PCM_BUFFER_SIZE];
+
+  int          r = SMTInputText(pszTextUtf8);
+  unsigned int i = 0;
+
+  if (r != SMT_SUCCESS)
+  {
+    _CleanThreadData();
+    printf(">>>  SMTInputText() returns %d.\n", r);
+  }
+
+
+  while (r == SMT_SUCCESS)
+  {
+    r = SMTSynthesize(& pPcmBuffer[i]);
+    if (_g.bStop)
+    {
+      _CleanThreadData();
+      _CallBack(TTSP_RESULT_EVENT_CANCEL, i, pPcmBuffer, pUserParam);
+      break;
+    }
+    else
+    {
+      switch (r)
+      {
+        case SMT_SYNTHESIS_FRAME_GENERATED:
+          if (i + FramePeriod == PCM_BUFFER_SIZE)
+          {
+            _CallBack(TTSP_RESULT_EVENT_CONTINUE, PCM_BUFFER_SIZE, pPcmBuffer, pUserParam);
+            i = 0;
+          }
+          else
+          {
+            i += FramePeriod;
+          }
+          break;
+
+        case SMT_SYNTHESIS_PAUSE_DONE    :
+        case SMT_SYNTHESIS_SENTENCE_DONE :
+          r = SMT_SUCCESS;
+          break;
+
+        case SMT_SYNTHESIS_ALL_DONE :
+          _CallBack(TTSP_RESULT_EVENT_FINISH, i, pPcmBuffer, pUserParam);
+          break;
+
+        default :
+          _CleanThreadData();
+
+          printf(">>>  SMTSynthesize() returns %d\n", r);
+
+          _CallBack(TTSP_RESULT_EVENT_FAIL, i, pPcmBuffer, pUserParam);
+          break;
+      }
+    }
+
+  } // end of while loop
+
+  return r;
+}
+
+//
+// END
+//
+// functions managing < Engine Switching >
+//
