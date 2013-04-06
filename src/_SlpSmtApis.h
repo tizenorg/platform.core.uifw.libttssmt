@@ -27,13 +27,12 @@ int  SLPSMT_Finalize      (void);
 int  SLPSMT_SetVoiceList  (ttspe_voice_list_s *);
 void SLPSMT_SetSpeechSpeed(ttsp_speed_e const eSpeechSpeed);
 int  SLPSMT_GetiVoiceInfo (char* const pszLanguage, ttsp_voice_type_e const eVoiceType);
+int  SLPSMT_GetiVoiceInfoEx(char* const pszLanguage, ttsp_voice_type_e const eVoiceType);
 int  SLPSMT_SynthesizeText(int const iVoiceInfo, char const * pszTextUtf8, void* const pUserParam);
 int  SLPSMT_StopSynthesis (void);
 
 char const * SLPSMT_GetPszKorean              (void);
 char const * SLPSMT_GetPszUSEnglish           (void);
-char const * SLPSMT_GetPszChinese             (void);
-char const * SLPSMT_GetPszUKEnglish           (void);
 char const * SLPSMT_GetPszGerman              (void);
 char const * SLPSMT_GetPszSpanish             (void);
 char const * SLPSMT_GetPszFrench              (void);

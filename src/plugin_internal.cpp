@@ -96,7 +96,7 @@ int plugin_SynthesizeText(char* const   pszLanguage, ttsp_voice_type_e eVoiceTyp
 	);
 
 	// set voice
-	iVoiceInfo = SLPSMT_GetiVoiceInfo(pszLanguage, eVoiceType);
+	iVoiceInfo = SLPSMT_GetiVoiceInfoEx(pszLanguage, eVoiceType);
 	if (iVoiceInfo < 0)
 	{
 		printf("iVoiceInfo < 0\n");
@@ -155,7 +155,7 @@ bool plugin_IsValidVoice(const char* language, ttsp_voice_type_e type)
 	if (NULL == language)
 		return TTSP_ERROR_INVALID_PARAMETER;
 
-	int iVoiceInfo = SLPSMT_GetiVoiceInfo((char* )language, type);
+	int iVoiceInfo = SLPSMT_GetiVoiceInfoEx((char* )language, type);
 
 	if (iVoiceInfo < 0)
 	{

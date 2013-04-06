@@ -23,6 +23,7 @@
 extern "C" {
 #endif
 
+#define UINT unsigned int
 
 typedef enum _eTypeLanguage
 {
@@ -72,14 +73,15 @@ typedef enum _eTypeLanguage
 #define SMT_SYNTHESIS_SENTENCE_DONE    2
 #define SMT_SYNTHESIS_PAUSE_DONE       3
 
-int SMTInitialize(void);
-int SMTFinalize(void);
-int SMTSet_Language(eTypeLanguage eLanguage, int VoiceType, int ModelFileLocation);
-int SMTInputText(char const * const pszText_UTF8);
-int SMTSynthesize(short * const pPcmBuffer);
-
-int  SMTGetFramePeriod (void);
-
+typedef enum _eTypeTTSMode
+{
+  eTTSMode_Normal,
+  eTTSMode_Dictionary,
+  
+  ///////////////////////////////////////////
+  
+  eTTSMode_INVALID,
+} eTypeTTSMode;
 
 typedef enum
 {
@@ -89,6 +91,18 @@ typedef enum
   eSMTSpeechSpeed_Fast,
   eSMTSpeechSpeed_VeryFast,
 } etypeSpeechSpeed;
+
+int SMTSetVoice           (eTypeTTSMode const eTTSMode, char const * const pszFilePath, char const DirDelimiter, char const * const pszLanguage, char const * const pszContry, char const * const pszVoiceType, UINT const VoiceIndex);
+int SMTCheckVoiceAvailable(eTypeTTSMode const eTTSMode, char const * const pszFilePath, char const DirDelimiter, char const * const pszLanguage, char const * const pszContry, char const * const pszVoiceType, UINT const VoiceIndex);
+
+
+int SMTInitialize(void);
+int SMTFinalize(void);
+int SMTSet_Language(eTypeLanguage eLanguage, int VoiceType, int ModelFileLocation);
+int SMTInputText(char const * const pszText_UTF8);
+int SMTSynthesize(short * const pPcmBuffer);
+
+int  SMTGetFramePeriod (void);
 
 void SMTSetSpeechSpeed(etypeSpeechSpeed const speed);
 

@@ -6,7 +6,7 @@
 
 Name:       libttssmt
 Summary:    Text To Speech smt plugin shared library
-Version:    0.0.29
+Version:    0.0.30
 Release:    1
 Group:      TO_BE/FILLED_IN
 License:    TO_BE/FILLED_IN

@@ -61,10 +61,6 @@ struct __TypeVoiceInfo
 
 static char const _pszKorean              [] = "ko_KR";
 static char const _pszUSEnglish           [] = "en_US";
-static char const _pszChinese             [] = "zh_CN";
-
-
-static char const _pszUKEnglish           [] = "en_GB";
 static char const _pszGerman              [] = "de_DE";
 static char const _pszSpanish             [] = "es_ES";
 static char const _pszFrench              [] = "fr_FR";
@@ -72,8 +68,6 @@ static char const _pszItalian             [] = "it_IT";
 
 static unsigned int const _sszKorean                 = sizeof(_pszKorean);
 static unsigned int const _sszUSEnglish              = sizeof(_pszUSEnglish);
-static unsigned int const _sszChinese                = sizeof(_pszChinese);
-static unsigned int const _sszUKEnglish              = sizeof(_pszUKEnglish);
 static unsigned int const _sszGerman                 = sizeof(_pszGerman);
 static unsigned int const _sszSpanish                = sizeof(_pszSpanish);
 static unsigned int const _sszFrench                 = sizeof(_pszFrench);
@@ -84,9 +78,7 @@ static const _TypeVoiceInfo _pVoiceInfos[] =
 {
   { _pszKorean              , _sszKorean              , TTSP_VOICE_TYPE_FEMALE },
   { _pszUSEnglish           , _sszUSEnglish           , TTSP_VOICE_TYPE_FEMALE },
-  { _pszChinese             , _sszChinese             , TTSP_VOICE_TYPE_FEMALE },
 
-  { _pszUKEnglish           , _sszUKEnglish           , TTSP_VOICE_TYPE_FEMALE },
   { _pszGerman              , _sszGerman              , TTSP_VOICE_TYPE_FEMALE },
   { _pszSpanish             , _sszSpanish             , TTSP_VOICE_TYPE_FEMALE },
   { _pszFrench              , _sszFrench              , TTSP_VOICE_TYPE_FEMALE },
@@ -98,12 +90,10 @@ static const _TypeVoiceInfo _pVoiceInfos[] =
 // index of VoiceInfos
 #define VOICE_INDEX_KOREAN_WOMAN         0
 #define VOICE_INDEX_USENGLISH_WOMAN       1
-#define VOICE_INDEX_CHINESE_WOMAN          2
-#define VOICE_INDEX_UKENGLISH_WOMAN        3
-#define VOICE_INDEX_GERMAN_WOMAN           4
-#define VOICE_INDEX_SPANISH_WOMAN          5
-#define VOICE_INDEX_FRENCH_WOMAN           6
-#define VOICE_INDEX_ITALIAN_WOMAN          7
+#define VOICE_INDEX_GERMAN_WOMAN           2
+#define VOICE_INDEX_SPANISH_WOMAN          3
+#define VOICE_INDEX_FRENCH_WOMAN           4
+#define VOICE_INDEX_ITALIAN_WOMAN          5
 
 
 
@@ -167,8 +157,8 @@ static int _Synthesize_SamsungTTS(char const * const pszTextUtf8, void* pUserPar
 
 char const * SLPSMT_GetPszKorean              (void) { return _pszKorean              ; }
 char const * SLPSMT_GetPszUSEnglish           (void) { return _pszUSEnglish           ; }
-char const * SLPSMT_GetPszChinese             (void) { return _pszChinese             ; }
-char const * SLPSMT_GetPszUKEnglish           (void) { return _pszUKEnglish           ; }
+
+
 char const * SLPSMT_GetPszGerman              (void) { return _pszGerman              ; }
 char const * SLPSMT_GetPszSpanish             (void) { return _pszSpanish             ; }
 char const * SLPSMT_GetPszFrench              (void) { return _pszFrench              ; }
@@ -220,6 +210,38 @@ int SLPSMT_SynthesizeText(int const iVoiceInfo, char const * pszTextUtf8, void *
 
 
 ttspe_voice_info_s * _gpVoiceInfos  = NULL;
+#define DATA_DIR1  "/usr/share/voice/tts/smt_vdata/"
+
+
+int SLPSMT_GetiVoiceInfoEx(char* const pszLanguage, ttsp_voice_type_e const eVoiceType)
+{
+	int i;
+	for (i=0 ; i<_nVoiceInfos ; i++)
+		{
+		if ( eVoiceType == _pVoiceInfos[i].eVoiceType  && ! strcmp(pszLanguage ,  _pVoiceInfos[i].pszLanguage)   )
+		{
+			int iResult = -1;
+			_eTypeTTSMode TTSType =   eTTSMode_Normal;
+			char Language[3] = {0,};
+			char Contry[3] = {0,};
+			char VoiceType[2] = {0,};
+
+			VoiceType[0] = 'f';
+			VoiceType[1] = 0;
+			memcpy( Language , pszLanguage , sizeof(Language)-1);
+			memcpy( Contry , pszLanguage+3 , sizeof(Contry)-1);
+
+			if( eVoiceType == TTSP_VOICE_TYPE_MALE ) VoiceType[0] = 'm';
+
+			iResult = SMTCheckVoiceAvailable( (_eTypeTTSMode)TTSType , DATA_DIR1 , '/' , Language , Contry , VoiceType , 1 );
+
+			printf("%d)####### iResult [%d]\n",i , iResult);
+
+			if( iResult == 0 ) return i ;
+		}
+	}
+	return -1;
+}
 
 int SLPSMT_SetVoiceList(ttspe_voice_list_s * p)
 {
@@ -467,9 +489,6 @@ static int _ChangeVoice(int const iVoiceInfo)
   {
     case VOICE_INDEX_KOREAN_WOMAN    		: SMTSet_Language(eKOREAN              ,  1, 0);              	break;
     case VOICE_INDEX_USENGLISH_WOMAN      	: SMTSet_Language(eUSENGLISH           ,  1, 0);          		break;
-    case VOICE_INDEX_CHINESE_WOMAN          	: SMTSet_Language(eCHINESE             ,  1, 0);	              break;
-
-    case VOICE_INDEX_UKENGLISH_WOMAN 		: SMTSet_Language(eGBENGLISH          ,  1, 0);			break;
     case VOICE_INDEX_GERMAN_WOMAN    		: SMTSet_Language(eGERMAN              ,  1, 0);			break;
     case VOICE_INDEX_SPANISH_WOMAN   		: SMTSet_Language(eSPANISH             ,  1, 0);			break;
     case VOICE_INDEX_FRENCH_WOMAN    		: SMTSet_Language(eFRENCH              ,  1, 0);			break;
