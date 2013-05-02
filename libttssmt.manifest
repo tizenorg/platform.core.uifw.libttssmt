@@ -10,37 +10,32 @@
 	</request>
 	<assign>
 		<filesystem path="/usr/share/voice/tts/smt_vdata" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_de_DE.dic" label="tts-engine-samsung::vdata"/>
+		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_de_DE.lng" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_de_DE_f01.am" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_de_DE_f01.cfg" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_de_DE_f01.dt" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_de_DE_f01.qs" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_GB_f01.am" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_GB_f01.cfg" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_GB_f01.dt" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_GB_f01.qs" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_GB.lng" label="tts-engine-samsung::vdata"/>
+		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US.lng" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_f01.am" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_f01.cfg" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_f01.dt" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_f01.qs" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US.lng" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US.pos" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_es_ES.dic" label="tts-engine-samsung::vdata"/>
+		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_es_ES.lng" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_es_ES_f01.am" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_es_ES_f01.cfg" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_es_ES_f01.dt" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_es_ES_f01.qs" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_fr_FR.dic" label="tts-engine-samsung::vdata"/>
+		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_fr_FR.lng" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_fr_FR_f01.am" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_fr_FR_f01.cfg" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_fr_FR_f01.dt" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_fr_FR_f01.qs" label="tts-engine-samsung::vdata"/>
+		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_it_IT.lng" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_it_IT_f01.am" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_it_IT_f01.cfg" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_it_IT_f01.dt" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_it_IT_f01.qs" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_it_IT.lng" label="tts-engine-samsung::vdata"/>
+		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR.lng" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR_f01.am" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR_f01.cfg" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR_f01.dt" label="tts-engine-samsung::vdata"/>
@@ -49,17 +44,5 @@
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR_f02.cfg" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR_f02.dt" label="tts-engine-samsung::vdata"/>
 		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR_f02.qs" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_ko_KR.lng" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_zh_CN.cart" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_zh_CN_f01.am" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_zh_CN_f01.cfg" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_zh_CN_f01.dt" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_zh_CN_f01.qs" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_zh_CN.pb" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_dict.lng" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_dict_f01.am" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_dict_f01.cfg" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_dict_f01.dt" label="tts-engine-samsung::vdata"/>
-		<filesystem path="/usr/share/voice/tts/smt_vdata/smt_en_US_dict_f01.qs" label="tts-engine-samsung::vdata"/>
 	</assign>
 </manifest>
