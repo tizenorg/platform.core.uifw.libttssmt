@@ -11,6 +11,7 @@ Release:    1
 Group:      TO_BE/FILLED_IN
 License:    TO_BE/FILLED_IN
 Source0:    %{name}-%{version}.tar.gz
+Source1001: 	libttssmt.manifest
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(tts)
@@ -23,6 +24,7 @@ Description: Text To Speech smt plugin shared library
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 
 cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 
@@ -34,7 +36,7 @@ rm -rf %{buildroot}
 %make_install
 
 %files
-%manifest libttssmt.manifest
+%manifest %{name}.manifest
 %defattr(-,root,root,-)
 %{_libdir}/voice/tts/1.0/engine/*
 /usr/share/voice/tts/smt_vdata/*
