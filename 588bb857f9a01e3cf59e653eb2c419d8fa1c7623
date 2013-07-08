@@ -1,0 +1,8 @@
+Change-Id: I588bb857f9a01e3cf59e653eb2c419d8fa1c7623
+Code-Review+2: Ryan Ware <ware@linux.intel.com>
+Verified+1: Ryan Ware <ware@linux.intel.com>
+Submitted-by: Ryan Ware <ware@linux.intel.com>
+Submitted-at: Mon, 08 Jul 2013 10:06:14 -0700
+Reviewed-on: https://review.tizen.org/gerrit/4600
+Project: platform/core/uifw/libttssmt
+Branch: refs/heads/tizen
