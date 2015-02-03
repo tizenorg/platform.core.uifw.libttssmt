@@ -1,15 +1,12 @@
-#sbs-git:slp/pkgs/l/libttssmt libttssmt 0.0.15 9c82c715d55cf32bb3d69112526145654ec2fbcc
 %define _optdir	/opt
 %define _appdir	%{_optdir}/apps
-
-
 
 Name:       libttssmt
 Summary:    Text To Speech smt plugin shared library
 Version:    0.0.32
 Release:    1
-Group:      TO_BE/FILLED_IN
-License:    TO_BE/FILLED_IN
+Group:      Graphics & UI Framework/Voice Framework
+License:    Flora-1.1
 Source0:    %{name}-%{version}.tar.gz
 Source1001: 	libttssmt.manifest
 BuildRequires:  cmake
