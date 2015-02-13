@@ -1,6 +1,6 @@
 /*
  * Samsung TTS
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright 2012-2014  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.1 (the License);
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@ int ttsp_load_engine(ttspd_funcs_s* pdfuncs, ttspe_funcs_s* pefuncs)
 {
   if (! pdfuncs)
   {
-    printf("parameter1, pdfuncs is NULL.");
+    SLOG(LOG_ERROR, LOG_TAG, "parameter1, pdfuncs is NULL.");
     return TTSP_ERROR_INVALID_PARAMETER;
   }
   if (! pefuncs)
   {
-    printf("parameter2, pefuncs is NULL.");
+    SLOG(LOG_ERROR, LOG_TAG, "parameter2, pefuncs is NULL.");
     return TTSP_ERROR_INVALID_PARAMETER;
   }
 
@@ -49,24 +49,23 @@ int ttsp_load_engine(ttspd_funcs_s* pdfuncs, ttspe_funcs_s* pefuncs)
 
   pefuncs->start_synth       = plugin_SynthesizeText;
   pefuncs->cancel_synth      = plugin_StopSynthesis;
-  pefuncs->get_audio_format  = plugin_GetAudioFormat;
 
   pefuncs->foreach_voices    = plugin_ForeachVoices;
   pefuncs->is_valid_voice    = plugin_IsValidVoice;
 
-  pefuncs->set_engine_setting  = plugin_SetSettingInfo;
-  pefuncs->foreach_engine_setting  = plugin_ForeachEngineSetting;
+  pefuncs->load_voice	     = plugin_LoadVoice;
+  pefuncs->unload_voice	     = plugin_UnloadVoice;
 
   plugin_SetDaemonAPIs(pdfuncs);
 
-  printf("[SMT] ttsp_load_engine() : version(%d), (6.20110527), size(%d)\n", pefuncs->version, pefuncs->size);
+  SLOG(LOG_DEBUG, LOG_TAG, "[SMT] ttsp_load_engine() : version(%d), (6.20110527), size(%d)", pefuncs->version, pefuncs->size);
 
   return TTSP_ERROR_NONE;
 }
 
 void ttsp_unload_engine(void)
 {
-  printf("[SMT] ttsp_unload_engine() \n");
+  SLOG(LOG_DEBUG, LOG_TAG, "[SMT] ttsp_unload_engine()");
 }
 
 int ttsp_get_engine_info(ttsp_engine_info_cb callback, void* user_data)
