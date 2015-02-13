@@ -1,6 +1,6 @@
 /*
  * Samsung TTS
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright 2012-2014  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.1 (the License);
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 #ifndef _PLUGIN_INTERNAL_H_
 #define _PLUGIN_INTERNAL_H_
 
+#include <dlog/dlog.h>
 #include <ttsp.h>
 
 #ifdef __cplusplus
@@ -31,11 +32,13 @@ extern "C" {
 
 #define VTTS_VOICE_NAME_BUF_SIZE 8
 
+#define LOG_TAG "ttsp"
+
 typedef char*	ttspe_language;
 
 typedef struct {
 	ttspe_language    lang;    /**< Language */
-	ttsp_voice_type_e vctype;  /**< Voice type */
+	int vctype;  /**< Voice type */
 } ttspe_voice_info_s;
 
 typedef struct {
@@ -49,26 +52,24 @@ int plugin_Finalize(void);
 
 int plugin_SynthesizeText
 (
-  char*    const   pszLanguage,
-  ttsp_voice_type_e const   eVoiceType,
+  char    const   *pszLanguage,
+  int const   eVoiceType,
   char              const * pszTextUtf8,
-  ttsp_speed_e     const   eSpeechSpeed,
+  int     const   eSpeechSpeed,
   void                    * pUserParam
 );
 
 int plugin_StopSynthesis(void);
 
-int plugin_GetAudioFormat(ttsp_audio_type_e* pType, int* pSamplingRate, int* pnChannels);
-
 int plugin_ForeachVoices(ttspe_supported_voice_cb callback, void* user_data);
 
-bool plugin_IsValidVoice(const char* language, ttsp_voice_type_e type);
+bool plugin_IsValidVoice(const char* language, int type);
 
-int plugin_SetDefaultSpeechSpeed(ttsp_speed_e const  SpeechSpeed);
+int plugin_SetDefaultSpeechSpeed(int const  SpeechSpeed);
 
-int plugin_SetSettingInfo(const char* key, const char* value);
+int plugin_LoadVoice(const char* language, int type);
 
-int plugin_ForeachEngineSetting(ttspe_engine_setting_cb callback, void* user_data);
+int plugin_UnloadVoice(const char* language, int type);
 
 void plugin_SetDaemonAPIs (ttspd_funcs_s const * pAPIs);
 
