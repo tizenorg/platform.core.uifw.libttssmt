@@ -41,6 +41,8 @@ cp %{_builddir}/%{name}-%{version}/LICENSE.Flora %{buildroot}/usr/share/license/
 %defattr(-,root,root,-)
 %{_libdir}/voice/tts/1.0/engine/*
 /usr/share/voice/tts/smt_vdata/*
+%ifarch %arm %i586
 %{_libdir}/libsmt.so*
+%endif
 %{_libdir}/voice/tts/1.0/engine-info/ttssmt-info.xml
 /usr/share/license/%{name}
