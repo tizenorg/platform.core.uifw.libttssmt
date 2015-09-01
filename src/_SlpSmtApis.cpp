@@ -25,7 +25,7 @@
 #include <pthread.h>
 
 
-#define SMT_SAMPLING_RATE  16000
+#define SMT_SAMPLING_RATE  24000
 
 #define PCM_BUFFER_SIZE    640000
 
@@ -233,7 +233,7 @@ int SLPSMT_GetiVoiceInfoEx(char const *pszLanguage, int const eVoiceType)
 
 			if( eVoiceType == TTSP_VOICE_TYPE_MALE ) VoiceType[0] = 'm';
 
-			iResult = SMTCheckVoiceAvailable( (_eTypeTTSMode)TTSType , DATA_DIR1 , '/' , Language , Contry , VoiceType , 1 );
+			iResult = SMTCheckVoiceAvailable( (_eTypeTTSMode)TTSType , DATA_DIR1 , '/' , Language , Contry , VoiceType , 0 );
 
 			SLOG(LOG_DEBUG, LOG_TAG, "%d)####### iResult [%d]",i , iResult);
 
@@ -499,12 +499,12 @@ static int _ChangeVoice(int const iVoiceInfo)
 
    switch (iVoiceInfo)
   {
-    case VOICE_INDEX_KOREAN_WOMAN    		: SMTSet_Language(eKOREAN              ,  1, 0);              	break;
-    case VOICE_INDEX_USENGLISH_WOMAN      	: SMTSet_Language(eUSENGLISH           ,  1, 0);          		break;
-    case VOICE_INDEX_GERMAN_WOMAN    		: SMTSet_Language(eGERMAN              ,  1, 0);			break;
-    case VOICE_INDEX_SPANISH_WOMAN   		: SMTSet_Language(eSPANISH             ,  1, 0);			break;
-    case VOICE_INDEX_FRENCH_WOMAN    		: SMTSet_Language(eFRENCH              ,  1, 0);			break;
-    case VOICE_INDEX_ITALIAN_WOMAN   			: SMTSet_Language(eITALIAN              ,  1, 0);			break;
+    case VOICE_INDEX_KOREAN_WOMAN    		: SMTSet_Language(eKOREAN              ,  0, 0);              	break;
+    case VOICE_INDEX_USENGLISH_WOMAN      	: SMTSet_Language(eUSENGLISH           ,  0, 0);          		break;
+    case VOICE_INDEX_GERMAN_WOMAN    		: SMTSet_Language(eGERMAN              ,  0, 0);			break;
+    case VOICE_INDEX_SPANISH_WOMAN   		: SMTSet_Language(eSPANISH             ,  0, 0);			break;
+    case VOICE_INDEX_FRENCH_WOMAN    		: SMTSet_Language(eFRENCH              ,  0, 0);			break;
+    case VOICE_INDEX_ITALIAN_WOMAN   			: SMTSet_Language(eITALIAN              ,  0, 0);			break;
 
     default : break; // This case has already been checked.
   }
