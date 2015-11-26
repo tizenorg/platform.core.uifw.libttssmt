@@ -28,6 +28,7 @@ cp %{SOURCE1001} .
 cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix} -DLIBDIR=%{_libdir} -DINCLUDEDIR=%{_includedir}
 
 %build
+export CFLAGS="${CFLAGS} -fPIC -fvisibility=hidden"
 make %{?jobs:-j%jobs}
 
 %install

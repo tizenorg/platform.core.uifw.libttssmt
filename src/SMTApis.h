@@ -94,7 +94,7 @@ typedef enum
 
 int SMTSetVoice           (eTypeTTSMode const eTTSMode, char const * const pszFilePath, char const DirDelimiter, char const * const pszLanguage, char const * const pszContry, char const * const pszVoiceType, UINT const VoiceIndex);
 int SMTCheckVoiceAvailable(eTypeTTSMode const eTTSMode, char const * const pszFilePath, char const DirDelimiter, char const * const pszLanguage, char const * const pszContry, char const * const pszVoiceType, UINT const VoiceIndex);
-
+int SMTGetSamplingRate(void);
 
 int SMTInitialize(void);
 int SMTFinalize(void);

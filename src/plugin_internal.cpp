@@ -44,9 +44,9 @@ int plugin_Finalize(void)
 int plugin_SynthesizeText(char const *pszLanguage, int eVoiceType_0,  char const *pszTextUtf8,
 			int eSpeechSpeed_0, void* pUserParam)
 {
-	int               iVoiceInfo   = -1;
+	int iVoiceInfo   = -1;
 	int eVoiceType   = eVoiceType_0;
-	int     eSpeechSpeed = eSpeechSpeed_0;
+	int eSpeechSpeed = eSpeechSpeed_0;
 
 	int ThreadId = SLPSMT_GetWorkingThreadId();
 	SLOG(LOG_DEBUG, LOG_TAG, ">>>plugin SynthesizeText()");
