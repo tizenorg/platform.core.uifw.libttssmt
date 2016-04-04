@@ -12,6 +12,7 @@ Source1001: 	libttssmt.manifest
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(libtzplatform-config)
 BuildRequires:  pkgconfig(tts)
 BuildRequires:	pkgconfig(tts-engine)
 
@@ -25,7 +26,8 @@ Description: Text To Speech smt plugin shared library
 %setup -q
 cp %{SOURCE1001} .
 
-cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix} -DLIBDIR=%{_libdir} -DINCLUDEDIR=%{_includedir}
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix} -DLIBDIR=%{_libdir} -DINCLUDEDIR=%{_includedir} \
+        -DTZ_SYS_RO_SHARE=%TZ_SYS_RO_SHARE -DTZ_SYS_BIN=%TZ_SYS_BIN
 
 %build
 export CFLAGS="${CFLAGS} -fPIC -fvisibility=hidden"
@@ -34,14 +36,14 @@ make %{?jobs:-j%jobs}
 %install
 rm -rf %{buildroot}
 %make_install
-mkdir -p %{buildroot}/usr/share/license
-cp %{_builddir}/%{name}-%{version}/LICENSE.Flora %{buildroot}/usr/share/license/%{name}
+mkdir -p %{buildroot}%{TZ_SYS_RO_SHARE}/license
+cp %{_builddir}/%{name}-%{version}/LICENSE.Flora %{buildroot}%{TZ_SYS_RO_SHARE}/license/%{name}
 
 %files
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
-%{_libdir}/voice/tts/1.0/engine/*
-/usr/share/voice/tts/smt_vdata/*
 %{_libdir}/libsmt.so*
-%{_libdir}/voice/tts/1.0/engine-info/ttssmt-info.xml
-/usr/share/license/%{name}
+%{TZ_SYS_RO_SHARE}/voice/tts/1.0/engine/*
+%{TZ_SYS_RO_SHARE}/voice/tts/smt_vdata/*
+%{TZ_SYS_RO_SHARE}/voice/tts/1.0/engine-info/ttssmt-info.xml
+%{TZ_SYS_RO_SHARE}/license/%{name}

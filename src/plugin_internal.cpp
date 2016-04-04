@@ -137,4 +137,15 @@ int plugin_UnloadVoice(const char* language, int type)
 void plugin_SetDaemonAPIs(ttspd_funcs_s const * pAPIs)
 {
 	gpDaemonAPIs = pAPIs;
+
+	int min, normal, max;
+
+	gpDaemonAPIs->get_speed_range(&min, &normal, &max);
+
+	printf("[SMT] Speed range : min(%d) normal(%d) max(%d)\n", min, normal, max);
+
+	gpDaemonAPIs->get_pitch_range(&min, &normal, &max);
+
+	printf("[SMT] Pitch range : min(%d) normal(%d) max(%d)\n", min, normal, max);
+
 }
