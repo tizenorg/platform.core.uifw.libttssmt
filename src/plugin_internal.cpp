@@ -30,14 +30,14 @@ static ttspd_funcs_s const * gpDaemonAPIs = NULL;
 int plugin_Initialize(ttspe_result_cb const pfnCallBack)
 {
 	int r = SLPSMT_Initialize(pfnCallBack);
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>plugin Initialize() returns %d.", r);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>plugin Initialize() returns %d.", r);
 	return r;
 }
 
 int plugin_Finalize(void)
 {
 	int r = SLPSMT_Finalize();
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>plugin Initialize() returns %d.", r);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>plugin Initialize() returns %d.", r);
 	return r;
 }
 
@@ -49,18 +49,18 @@ int plugin_SynthesizeText(char const *pszLanguage, int eVoiceType_0,  char const
 	int eSpeechSpeed = eSpeechSpeed_0;
 
 	int ThreadId = SLPSMT_GetWorkingThreadId();
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>plugin SynthesizeText()");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>plugin SynthesizeText()");
 	if (ThreadId != -1)
 	{
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  A new text is comming into the TTS engine, while Synthesizing.");
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  The text would be pushed into the thread queue.");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  A new text is comming into the TTS engine, while Synthesizing.");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  The text would be pushed into the thread queue.");
 	}
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  ThreadId = %d", ThreadId);
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  pUserParam = 0x%x", (unsigned int)(reinterpret_cast<long>(pUserParam)));
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  ThreadId = %d", ThreadId);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  pUserParam = 0x%x", (unsigned int)(reinterpret_cast<long>(pUserParam)));
 
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  eSpeechSpeed = %d", eSpeechSpeed);
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  pszLanguage  = %s", pszLanguage);
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  eVoiceType   = %s", //eVoiceType==TTSPE_VCTYPE_DEFAULT ? "TTSPE_VCTYPE_DEFAULT" :
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  eSpeechSpeed = %d", eSpeechSpeed);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  pszLanguage  = %s", pszLanguage);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  eVoiceType   = %s", //eVoiceType==TTSPE_VCTYPE_DEFAULT ? "TTSPE_VCTYPE_DEFAULT" :
 				     eVoiceType==TTSP_VOICE_TYPE_MALE    ? "TTSP_VOICE_TYPE_MALE"    :
 				     eVoiceType==TTSP_VOICE_TYPE_FEMALE  ? "TTSP_VOICE_TYPE_FEMALE"  :
 				     eVoiceType==TTSP_VOICE_TYPE_CHILD   ? "TTSP_VOICE_TYPE_CHILD"   : ""
@@ -72,7 +72,7 @@ int plugin_SynthesizeText(char const *pszLanguage, int eVoiceType_0,  char const
 	iVoiceInfo = SLPSMT_GetiVoiceInfoEx(pszLanguage, eVoiceType);
 	if (iVoiceInfo < 0)
 	{
-		SLOG(LOG_ERROR, LOG_TAG, "iVoiceInfo < 0");
+		SLOG(LOG_ERROR, TAG_TTSP, "iVoiceInfo < 0");
 		return TTSP_ERROR_INVALID_VOICE;
 	}
 
@@ -100,7 +100,7 @@ int plugin_ForeachVoices(ttspe_supported_voice_cb callback, void* user_data)
 	{
 		if (false == callback(temp[i].lang, temp[i].vctype, user_data))
 		{
-			SLOG(LOG_ERROR, LOG_TAG, ">> plugin_ForeachVoices(), callback fail!!");
+			SLOG(LOG_ERROR, TAG_TTSP, ">> plugin_ForeachVoices(), callback fail!!");
 			break;
 		}
 	}
@@ -117,7 +117,7 @@ bool plugin_IsValidVoice(const char* language, int type)
 
 	if (iVoiceInfo < 0)
 	{
-		SLOG(LOG_ERROR, LOG_TAG, "iVoiceInfo < 0");
+		SLOG(LOG_ERROR, TAG_TTSP, "iVoiceInfo < 0");
 		return false;
 	}
 

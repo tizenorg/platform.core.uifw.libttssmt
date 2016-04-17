@@ -178,7 +178,7 @@ int          SLPSMT_GetWorkingThreadId(void) { return _g.ThreadId; }
 
 int SLPSMT_StopSynthesis(void)
 {
-	SLOG(LOG_DEBUG, LOG_TAG, ">> SLPSMT_StopSynthesis()");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">> SLPSMT_StopSynthesis()");
 	std::lock_guard<std::mutex> lock( _g.bStopMutex );
 	_g.bStop         = true;
 	_g.bSentenceDone = true;
@@ -191,9 +191,9 @@ int SLPSMT_SynthesizeText(int const iVoiceInfo, char const * pszTextUtf8, void *
 	if (! _g.pfnCallback)                { return TTSP_ERROR_INVALID_STATE; }
 	if (! pszTextUtf8 || ! *pszTextUtf8) { return TTSP_ERROR_INVALID_PARAMETER; }
 
-	SLOG(LOG_DEBUG, LOG_TAG, ">> SLPSMT_SynthesizeText()");
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>> iVoiceInfo  : %d", iVoiceInfo );
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>> pszTextUtf8 : %s", pszTextUtf8);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">> SLPSMT_SynthesizeText()");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>> iVoiceInfo  : %d", iVoiceInfo );
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>> pszTextUtf8 : %s", pszTextUtf8);
 
 
 	std::lock_guard<std::mutex> lock( _g.bStopMutex );
@@ -206,7 +206,7 @@ int SLPSMT_SynthesizeText(int const iVoiceInfo, char const * pszTextUtf8, void *
 		_g.ThreadId = pthread_create(& _g.Thread, NULL, _Synthesize, pUserParam);
 		if (_g.ThreadId < 0)
 		{
-			SLOG(LOG_ERROR, LOG_TAG, ">>>  Fail to create thread");
+			SLOG(LOG_ERROR, TAG_TTSP, ">>>  Fail to create thread");
 			return TTSP_ERROR_OPERATION_FAILED;
 		}
 		pthread_detach(_g.Thread);
@@ -246,7 +246,7 @@ int SLPSMT_GetiVoiceInfoEx(char const *pszLanguage, int const eVoiceType)
 
 			iResult = SMTCheckVoiceAvailable( (_eTypeTTSMode)TTSType , DATA_DIR1 , '/' , Language , Contry , VoiceType , 0 );
 
-			SLOG(LOG_DEBUG, LOG_TAG, "%d)####### iResult [%d]",i , iResult);
+			SLOG(LOG_DEBUG, TAG_TTSP, "%d)####### iResult [%d]",i , iResult);
 
 			if( iResult == 0 ) return i ;
 		}
@@ -325,7 +325,7 @@ int SLPSMT_Initialize(ttspe_result_cb pfnCallBack)
 
 int SLPSMT_Finalize(void)
 {
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>> SLPSMT_Finalize() called.");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>> SLPSMT_Finalize() called.");
 
 	std::lock_guard<std::mutex> lock( _g.bStopMutex );
 	_g.bStop = true;
@@ -354,7 +354,7 @@ int SLPSMT_Finalize(void)
 		usleep(10000);
 	}
 
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>> SLPSMT_Finalize() returns.");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>> SLPSMT_Finalize() returns.");
 	return TTSP_ERROR_NONE;
 }
 
@@ -388,7 +388,7 @@ static void _PushThreadData(int const iVoiceInfo, char const * pszTextUtf8, void
 		if (! b) { free(pszDuplicatedTextUtf8); }
 	}
 
-	if (! b) { SLOG(LOG_ERROR, LOG_TAG, ">>>__PushThreadData, out of memory"); }
+	if (! b) { SLOG(LOG_ERROR, TAG_TTSP, ">>>__PushThreadData, out of memory"); }
 
 	pthread_mutex_unlock(& _g.ThreadLock);       // <---- unlock
 }
@@ -451,20 +451,20 @@ static void * _Synthesize(void* NotUsed)
 		{
 			int r = SMT_SUCCESS;
 
-			SLOG(LOG_DEBUG, LOG_TAG, ">>>> Thread, _Synthesize(), iVoiceInfo = %d", iVoiceInfo);
-			SLOG(LOG_DEBUG, LOG_TAG, ">>>>>> pszTextUtf8 = %s", pszTextUtf8);
+			SLOG(LOG_DEBUG, TAG_TTSP, ">>>> Thread, _Synthesize(), iVoiceInfo = %d", iVoiceInfo);
+			SLOG(LOG_DEBUG, TAG_TTSP, ">>>>>> pszTextUtf8 = %s", pszTextUtf8);
 
 			if (iVoiceInfo != _g.iVoiceInfo)
 			{
 				r = _ChangeVoice(iVoiceInfo);
-				SLOG(LOG_DEBUG, LOG_TAG, ">>>>>> iVoiceInfo was changed.");
+				SLOG(LOG_DEBUG, TAG_TTSP, ">>>>>> iVoiceInfo was changed.");
 			}
 
 			if (r == SMT_SUCCESS)
 			{
 				_SetSpeechSpeed();
 
-				SLOG(LOG_DEBUG, LOG_TAG, ">>>>>> Set speech-speed");
+				SLOG(LOG_DEBUG, TAG_TTSP, ">>>>>> Set speech-speed");
 
 				pthread_mutex_lock  (& _g.MainThreadFinalizeLock);       // <---- lock
 
@@ -473,7 +473,7 @@ static void * _Synthesize(void* NotUsed)
 				pthread_mutex_unlock(& _g.MainThreadFinalizeLock);       // <---- unlock
 
 			}
-			SLOG(LOG_DEBUG, LOG_TAG, ">>>Thread, _Synthesize() done");
+			SLOG(LOG_DEBUG, TAG_TTSP, ">>>Thread, _Synthesize() done");
 		}
 
 		free(p->pszTextUtf8);
@@ -528,7 +528,7 @@ static int _ChangeVoice(int const iVoiceInfo)
 	SMTFinalize();
 	r = SMTInitialize();
 
-	if (r != SMT_SUCCESS) { SLOG(LOG_DEBUG, LOG_TAG, ">>>  _ChangeVoice() returns %d.", r); }
+	if (r != SMT_SUCCESS) { SLOG(LOG_DEBUG, TAG_TTSP, ">>>  _ChangeVoice() returns %d.", r); }
 	else
 	{
 		_g.iSamplingRate = SMTGetSamplingRate();
@@ -539,7 +539,7 @@ static int _ChangeVoice(int const iVoiceInfo)
 
 static void _SetSpeechSpeed(void)
 {
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>> Set speech speed %d", _g.eSpeechSpeed);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>> Set speech speed %d", _g.eSpeechSpeed);
 	switch (_g.eSpeechSpeed)
 	{
 	case 14	: SMTSetSpeechSpeed(eSMTSpeechSpeed_VeryFast);  break;
@@ -556,8 +556,8 @@ static void _CallBack(ttsp_result_event_e eEvent, unsigned int const nPCMs, void
 	unsigned int const n = nPCMs * sizeof(short);
 
 
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  callback, pUserParam = 0x%x", (unsigned int)(reinterpret_cast<long>(pUserParam)));
-	SLOG(LOG_DEBUG, LOG_TAG, ">>>  callback, event=");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  callback, pUserParam = 0x%x", (unsigned int)(reinterpret_cast<long>(pUserParam)));
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>>  callback, event=");
 
 	switch (eEvent)
 	{
@@ -580,7 +580,7 @@ static void _CallBack(ttsp_result_event_e eEvent, unsigned int const nPCMs, void
 		static int iWave = 0;
 		static char pszWave[100];
 
-		SLOG(LOG_DEBUG, LOG_TAG, "@@@ saving wave file @@@");
+		SLOG(LOG_DEBUG, TAG_TTSP, "@@@ saving wave file @@@");
 		//sprintf(pszWave, "/mnt/nfs/tts/play%d.wav", iWave++);
 		SMTSaveWave(pszWave, (short*) pPCMs, nPCMs * 2);
 	}
@@ -588,32 +588,32 @@ static void _CallBack(ttsp_result_event_e eEvent, unsigned int const nPCMs, void
 
 	switch (eEvent)
 	{
-	case TTSP_RESULT_EVENT_START   : SLOG(LOG_DEBUG, LOG_TAG, "TTSPE_CBEVENT_SYNTH_START");     break;
-	case TTSP_RESULT_EVENT_CONTINUE: SLOG(LOG_DEBUG, LOG_TAG, "TTSPE_CBEVENT_SYNTH_CONTINUE");  break;
-	case TTSP_RESULT_EVENT_FINISH  : SLOG(LOG_DEBUG, LOG_TAG, "TTSPE_CBEVENT_SYNTH_FINISH");    break;
-	case TTSP_RESULT_EVENT_FAIL    : SLOG(LOG_DEBUG, LOG_TAG, "TTSPE_CBEVENT_SYNTH_FAIL");      break;
-	default                          : SLOG(LOG_ERROR, LOG_TAG, "invalid");                       break;
+	case TTSP_RESULT_EVENT_START   : SLOG(LOG_DEBUG, TAG_TTSP, "TTSPE_CBEVENT_SYNTH_START");     break;
+	case TTSP_RESULT_EVENT_CONTINUE: SLOG(LOG_DEBUG, TAG_TTSP, "TTSPE_CBEVENT_SYNTH_CONTINUE");  break;
+	case TTSP_RESULT_EVENT_FINISH  : SLOG(LOG_DEBUG, TAG_TTSP, "TTSPE_CBEVENT_SYNTH_FINISH");    break;
+	case TTSP_RESULT_EVENT_FAIL    : SLOG(LOG_DEBUG, TAG_TTSP, "TTSPE_CBEVENT_SYNTH_FAIL");      break;
+	default                          : SLOG(LOG_ERROR, TAG_TTSP, "invalid");                       break;
 	}
 
 	if (eEvent==TTSP_RESULT_EVENT_FINISH && ! _bEmptyThreadData())
 	{
-		SLOG(LOG_DEBUG, LOG_TAG, ">>> There is another input text.");
-		SLOG(LOG_DEBUG, LOG_TAG, ">>> TTSPE_CBEVENT_SYNTH_FINISH was chanage into TTSPE_CBEVENT_SYNTH_CONTINUE.");
+		SLOG(LOG_DEBUG, TAG_TTSP, ">>> There is another input text.");
+		SLOG(LOG_DEBUG, TAG_TTSP, ">>> TTSPE_CBEVENT_SYNTH_FINISH was chanage into TTSPE_CBEVENT_SYNTH_CONTINUE.");
 		eEvent = TTSP_RESULT_EVENT_CONTINUE;
 	}
 
-	SLOG(LOG_DEBUG, LOG_TAG, ">>> data size = %d", n);
-	SLOG(LOG_DEBUG, LOG_TAG, ">> >> Here we jump into the callback function.");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">>> data size = %d", n);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">> >> Here we jump into the callback function.");
 
 	int cbreturn = -1;
 	if(_g.pfnCallback != NULL){
 		cbreturn = _g.pfnCallback(eEvent, pPCMs, n, TTSP_AUDIO_TYPE_RAW_S16, _g.iSamplingRate, pUserParam);
 	}
-	SLOG(LOG_DEBUG, LOG_TAG, ">> >> Here we return from the callback function.");
-	SLOG(LOG_DEBUG, LOG_TAG, ">> >> callback function return value = %d", cbreturn);
+	SLOG(LOG_DEBUG, TAG_TTSP, ">> >> Here we return from the callback function.");
+	SLOG(LOG_DEBUG, TAG_TTSP, ">> >> callback function return value = %d", cbreturn);
 	if (-1 == cbreturn)
 	{
-		SLOG(LOG_DEBUG, LOG_TAG, ">>> Callback function returns TTS_CALLBACK_HALT.");
+		SLOG(LOG_DEBUG, TAG_TTSP, ">>> Callback function returns TTS_CALLBACK_HALT.");
 		std::lock_guard<std::mutex> lock( _g.bStopMutex );
 		_g.bStop         = true;
 		_g.bSentenceDone = true;
@@ -630,7 +630,7 @@ static int _Synthesize_SamsungTTS(char const * const pszTextUtf8, void* pUserPar
 	if (r != SMT_SUCCESS)
 	{
 		_CleanThreadData();
-		SLOG(LOG_DEBUG, LOG_TAG, ">>>  SMTInputText() returns %d.", r);
+		SLOG(LOG_DEBUG, TAG_TTSP, ">>>  SMTInputText() returns %d.", r);
 	}
 
 
@@ -671,7 +671,7 @@ static int _Synthesize_SamsungTTS(char const * const pszTextUtf8, void* pUserPar
 			default :
 				_CleanThreadData();
 
-				SLOG(LOG_DEBUG, LOG_TAG, ">>>  SMTSynthesize() returns %d", r);
+				SLOG(LOG_DEBUG, TAG_TTSP, ">>>  SMTSynthesize() returns %d", r);
 
 				_CallBack(TTSP_RESULT_EVENT_FAIL, i, pPcmBuffer, pUserParam);
 				break;

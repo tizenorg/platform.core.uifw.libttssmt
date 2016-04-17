@@ -32,7 +32,7 @@ extern "C" {
 
 #define VTTS_VOICE_NAME_BUF_SIZE 8
 
-#define LOG_TAG "ttsp"
+#define TAG_TTSP "ttsp"
 
 typedef char*	ttspe_language;
 

@@ -32,12 +32,12 @@ int ttsp_load_engine(ttspd_funcs_s* pdfuncs, ttspe_funcs_s* pefuncs)
 {
   if (! pdfuncs)
   {
-    SLOG(LOG_ERROR, LOG_TAG, "parameter1, pdfuncs is NULL.");
+    SLOG(LOG_ERROR, TAG_TTSP, "parameter1, pdfuncs is NULL.");
     return TTSP_ERROR_INVALID_PARAMETER;
   }
   if (! pefuncs)
   {
-    SLOG(LOG_ERROR, LOG_TAG, "parameter2, pefuncs is NULL.");
+    SLOG(LOG_ERROR, TAG_TTSP, "parameter2, pefuncs is NULL.");
     return TTSP_ERROR_INVALID_PARAMETER;
   }
 
@@ -58,14 +58,14 @@ int ttsp_load_engine(ttspd_funcs_s* pdfuncs, ttspe_funcs_s* pefuncs)
 
   plugin_SetDaemonAPIs(pdfuncs);
 
-  SLOG(LOG_DEBUG, LOG_TAG, "[SMT] ttsp_load_engine() : version(%d), (6.20110527), size(%d)", pefuncs->version, pefuncs->size);
+  SLOG(LOG_DEBUG, TAG_TTSP, "[SMT] ttsp_load_engine() : version(%d), (6.20110527), size(%d)", pefuncs->version, pefuncs->size);
 
   return TTSP_ERROR_NONE;
 }
 
 void ttsp_unload_engine(void)
 {
-  SLOG(LOG_DEBUG, LOG_TAG, "[SMT] ttsp_unload_engine()");
+  SLOG(LOG_DEBUG, TAG_TTSP, "[SMT] ttsp_unload_engine()");
 }
 
 int ttsp_get_engine_info(ttsp_engine_info_cb callback, void* user_data)
