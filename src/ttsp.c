@@ -56,6 +56,8 @@ int ttsp_load_engine(ttspd_funcs_s* pdfuncs, ttspe_funcs_s* pefuncs)
   pefuncs->load_voice	     = plugin_LoadVoice;
   pefuncs->unload_voice	     = plugin_UnloadVoice;
 
+  pefuncs->need_app_credential = plugin_NeedAppCredential;
+
   plugin_SetDaemonAPIs(pdfuncs);
 
   SLOG(LOG_DEBUG, TAG_TTSP, "[SMT] ttsp_load_engine() : version(%d), (6.20110527), size(%d)", pefuncs->version, pefuncs->size);

@@ -42,7 +42,7 @@ int plugin_Finalize(void)
 }
 
 int plugin_SynthesizeText(char const *pszLanguage, int eVoiceType_0,  char const *pszTextUtf8,
-			int eSpeechSpeed_0, void* pUserParam)
+			int eSpeechSpeed_0, const char* credential, void* pUserParam)
 {
 	int iVoiceInfo   = -1;
 	int eVoiceType   = eVoiceType_0;
@@ -132,6 +132,11 @@ int plugin_LoadVoice(const char* language, int type)
 int plugin_UnloadVoice(const char* language, int type)
 {
 	return 0;
+}
+
+bool plugin_NeedAppCredential(void)
+{
+	return false;
 }
 
 void plugin_SetDaemonAPIs(ttspd_funcs_s const * pAPIs)
