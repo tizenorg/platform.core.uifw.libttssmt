@@ -21,6 +21,7 @@
 
 #include <dlog/dlog.h>
 #include <ttsp.h>
+#include <tizen.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,7 +33,7 @@ extern "C" {
 
 #define VTTS_VOICE_NAME_BUF_SIZE 8
 
-#define TAG_TTSP "ttsp"
+#define TTSP_TAG "ttsp"
 
 typedef char*	ttspe_language;
 
@@ -50,14 +51,8 @@ int plugin_Initialize(ttspe_result_cb const cb_func);
 
 int plugin_Finalize(void);
 
-int plugin_SynthesizeText
-(
-  char    const   *pszLanguage,
-  int const   eVoiceType,
-  char              const * pszTextUtf8,
-  int     const   eSpeechSpeed,
-  void                    * pUserParam
-);
+int plugin_SynthesizeText(char const *pszLanguage, int eVoiceType_0,  char const *pszTextUtf8,
+			int eSpeechSpeed_0, const char* credential, void* pUserParam);
 
 int plugin_StopSynthesis(void);
 
@@ -70,6 +65,8 @@ int plugin_SetDefaultSpeechSpeed(int const  SpeechSpeed);
 int plugin_LoadVoice(const char* language, int type);
 
 int plugin_UnloadVoice(const char* language, int type);
+
+bool plugin_NeedAppCredential(void);
 
 void plugin_SetDaemonAPIs (ttspd_funcs_s const * pAPIs);
 
