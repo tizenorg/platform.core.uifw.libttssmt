@@ -1,6 +1,6 @@
 /*
  * Samsung TTS
- * Copyright 2012-2014  Samsung Electronics Co., Ltd
+ * Copyright 2012-2016  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.1 (the License);
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 #define   __SLP_SMT_APIS_H__
 
 #include <ttsp.h>
+#include <tzplatform_config.h>
 #include "plugin_internal.h"
 
 int  SLPSMT_Initialize    (ttspe_result_cb const pfnCallBack);
