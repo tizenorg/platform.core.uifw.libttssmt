@@ -1,6 +1,6 @@
 /*
  * Samsung TTS
- * Copyright 2012-2014  Samsung Electronics Co., Ltd
+ * Copyright 2012-2016  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.1 (the License);
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ extern "C" {
 
 #define ENGINE_UUID    "27F277E9-BBC4-4dca-B553-D9884A3CDAA0"
 #define ENGINE_NAME    "Samsung TTS"
-#define ENGINE_UG_NAME "tts_smt_setting_ug.so"
+#define ENGINE_UG_NAME "org.tizen.ttssmt-setting"
 
 #define VTTS_VOICE_NAME_BUF_SIZE 8
 

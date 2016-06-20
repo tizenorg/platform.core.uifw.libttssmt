@@ -2,7 +2,7 @@
 <tts-engine>
         <name>Samsung TTS</name>
         <id>27F277E9-BBC4-4dca-B553-D9884A3CDAA0</id>
-        <setting>/usr/ug/ug-tts-setting-smt.so</setting>
+        <setting>org.tizen.ttssmt-setting</setting>
         <voices>
                 <voice type="female">en_US</voice>
                 <voice type="female">ko_KR</voice>
