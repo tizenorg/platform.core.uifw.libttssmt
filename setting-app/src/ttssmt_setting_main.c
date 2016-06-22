@@ -492,9 +492,11 @@ static void __download_state_changed_cb(int download_id, download_state_e state,
 	if (DOWNLOAD_STATE_COMPLETED == state) {
 		dlog_print(DLOG_INFO, LOG_TAG, "===== Download Completed");
 		ecore_main_loop_thread_safe_call_sync(__download_completed_cb, user_data);
+        download_destroy(download_id);
 	} else if (DOWNLOAD_STATE_FAILED == state) {
 		dlog_print(DLOG_INFO, LOG_TAG, "===== Download Failed");
 		ecore_main_loop_thread_safe_call_sync(__download_failed_cb, user_data);
+        download_destroy(download_id);
 	}
 
 	dlog_print(DLOG_INFO, LOG_TAG, "=====");
@@ -519,10 +521,15 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 		error = download_create(&download_id);
 		if (DOWNLOAD_ERROR_NONE != error) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] create");
+            __show_progress_popup(true);
+            return;
 		}
 		error = download_set_state_changed_cb(download_id, __download_state_changed_cb, (void *)pidx);
 		if (DOWNLOAD_ERROR_NONE != error) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] set state cb");
+            __show_progress_popup(true);
+            download_destroy(download_id);
+            return;
 		}
 
 		char url[1024] = {'\0',};
@@ -530,6 +537,9 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 		error = download_set_url(download_id, url);
 		if (DOWNLOAD_ERROR_NONE != error) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] set url");
+            __show_progress_popup(true);
+            download_destroy(download_id);
+            return;
 		}
 
 		//char *data_path = app_get_data_path();
@@ -537,12 +547,18 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 		error = download_set_destination(download_id, data_path);
 		if (DOWNLOAD_ERROR_NONE != error) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] set destination");
+            __show_progress_popup(true);
+            download_destroy(download_id);
+            return;
 		}
 		//free(data_path);
 
 		error = download_start(download_id);
 		if (DOWNLOAD_ERROR_NONE != error) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] start");
+            __show_progress_popup(true);
+            download_destroy(download_id);
+            return;
 		}
 		
 		__show_progress_popup(false);
