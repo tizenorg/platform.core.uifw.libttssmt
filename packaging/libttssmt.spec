@@ -21,6 +21,7 @@ BuildRequires:  pkgconfig(aul)
 BuildRequires:  pkgconfig(capi-appfw-application)
 BuildRequires:  pkgconfig(efl-extension)
 BuildRequires:  pkgconfig(capi-web-url-download)
+BuildRequires:  pkgconfig(capi-network-wifi)
 
 provides : libsmt.so
 
