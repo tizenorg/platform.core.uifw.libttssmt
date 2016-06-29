@@ -138,6 +138,8 @@ static Elm_Genlist_Item_Class *g_itc_button_1line = NULL;
 
 static appdata_s *g_ad;
 
+static int g_download_id;
+
 typedef struct {
 	char*	language;
 	int	type;
@@ -342,6 +344,14 @@ static Evas_Object * __genlist_content_get(void *data, Evas_Object *obj, const c
 	return NULL;
 }
 
+static void __hide_progress_popup()
+{
+	if (NULL != g_ad->progress_popup) {
+		evas_object_del(g_ad->progress_popup);
+		g_ad->progress_popup = NULL;
+	}
+}
+
 static void __progress_popup_del_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	if (NULL != g_ad->progress_popup) {
@@ -353,10 +363,11 @@ static void __progress_popup_del_cb(void *data, Evas *e, Evas_Object *obj, void 
 
 static void __progress_popup_back_cb(void *data, Evas_Object *obj, void *event_info)
 {
+
 	return;
 }
 
-static void __show_progress_popup(bool failed)
+static void __show_progress_popup(bool failed, const char* msg)
 {
 	if (NULL != g_ad->progress_popup) {
 		evas_object_del(g_ad->progress_popup);
@@ -369,7 +380,11 @@ static void __show_progress_popup(bool failed)
 	elm_object_part_text_set(popup, "title,text", "Downloading");
 
 	if (failed) {
-		elm_object_part_text_set(popup, "default", "Fail to download language pack.");
+		if (NULL != msg) {
+			elm_object_part_text_set(popup, "default", msg);
+		} else {
+			elm_object_part_text_set(popup, "default", "Fail to download language pack.");
+		}
 		elm_popup_timeout_set(popup, 2.0);
 
 	} else {
@@ -437,18 +452,8 @@ static void __show_delete_popup()
 	evas_object_show(popup);
 }
 
-static void __hide_progress_popup()
+static void __remove_temp_file(int idx)
 {
-	if (NULL != g_ad->progress_popup) {
-		evas_object_del(g_ad->progress_popup);
-		g_ad->progress_popup = NULL;
-	}
-}
-
-static void* __download_completed_cb(void *user_data)
-{
-	intptr_t pidx = (intptr_t)user_data;
-	int idx = (int)pidx;
 	char cmd[1024] = {'\0',};
 	//char* data_path = app_get_data_path();
 	const char* data_path = TTS_ENGINE_DATA_PATH;
@@ -459,6 +464,13 @@ static void* __download_completed_cb(void *user_data)
 	char filepath[1024] = {'\0',};
 	snprintf(filepath, 1024, "%s/%s.tar.gz", data_path, item_data[idx][2]);
 	remove(filepath);
+}
+
+static void* __download_completed_cb(void *user_data)
+{
+	intptr_t pidx = (intptr_t)user_data;
+	int idx = (int)pidx;
+	__remove_temp_file(idx);
 
 	/* TODO */
 	tts_config_voice_s *voice = (tts_config_voice_s *)calloc(1, sizeof(tts_config_voice_s));
@@ -481,9 +493,22 @@ static void* __download_completed_cb(void *user_data)
 
 static void* __download_failed_cb(void *user_data)
 {
+	intptr_t pidx = (intptr_t)user_data;
+	int idx = (int)pidx;
+	__remove_temp_file(idx);
+
 	__hide_progress_popup();
-	__show_progress_popup(true);
+	__show_progress_popup(true, NULL);
 	elm_genlist_item_update(g_ad->selected_lang);
+	return NULL;
+}
+
+static void* __download_canceled_cb(void *user_data)
+{
+	intptr_t pidx = (intptr_t)user_data;
+	int idx = (int)pidx;
+	__remove_temp_file(idx);
+
 	return NULL;
 }
 
@@ -492,14 +517,30 @@ static void __download_state_changed_cb(int download_id, download_state_e state,
 	if (DOWNLOAD_STATE_COMPLETED == state) {
 		dlog_print(DLOG_INFO, LOG_TAG, "===== Download Completed");
 		ecore_main_loop_thread_safe_call_sync(__download_completed_cb, user_data);
-		download_destroy(download_id);
 	} else if (DOWNLOAD_STATE_FAILED == state) {
 		dlog_print(DLOG_INFO, LOG_TAG, "===== Download Failed");
 		ecore_main_loop_thread_safe_call_sync(__download_failed_cb, user_data);
-		download_destroy(download_id);
+	} else if (DOWNLOAD_STATE_CANCELED == state) {
+		dlog_print(DLOG_INFO, LOG_TAG, "===== Download Canceled");
+		ecore_main_loop_thread_safe_call_sync(__download_canceled_cb, user_data);
 	}
 
+	download_destroy(download_id);
+	wifi_deinitialize();
 	dlog_print(DLOG_INFO, LOG_TAG, "=====");
+}
+
+static void __wifi_conn_changed_cb(wifi_connection_state_e state, wifi_ap_h ap, void* user_data)
+{
+	if (WIFI_CONNECTION_STATE_CONNECTED != state) {
+		dlog_print(DLOG_INFO, LOG_TAG, "Wifi disconnected");
+		int ret;
+		ret = download_cancel(g_download_id);
+		if (DOWNLOAD_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to download cancel");
+		}
+		__show_progress_popup(true, "Network ERROR - Check wifi connection");
+	}
 }
 
 static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_info)
@@ -515,54 +556,100 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 	/* download */
 	if (false == __installed_lang(idx)) {
 		dlog_print(DLOG_INFO, LOG_TAG, ">> Download <<");
-		download_error_e error;
-		int download_id;
+		int ret;
 
-		error = download_create(&download_id);
-		if (DOWNLOAD_ERROR_NONE != error) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] create");
-			__show_progress_popup(true);
+		ret = wifi_initialize();
+		if (WIFI_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to wifi init");
+			__show_progress_popup(true, "Network ERROR - Check wifi connection");
 			return;
 		}
-		error = download_set_state_changed_cb(download_id, __download_state_changed_cb, (void *)pidx);
-		if (DOWNLOAD_ERROR_NONE != error) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] set state cb");
-			__show_progress_popup(true);
+
+		wifi_connection_state_e state;
+		ret = wifi_get_connection_state(&state);
+		if (WIFI_ERROR_NONE != ret) {
+			__show_progress_popup(true, "Network ERROR - Check wifi connection");
+			wifi_deinitialize();
+			return;
+		}
+
+		if (WIFI_CONNECTION_STATE_CONNECTED != state) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "Wifi Disconnected");
+			__show_progress_popup(true, "Network ERROR - Check wifi connection");
+			wifi_deinitialize();
+			return;
+		}
+
+		ret = wifi_set_connection_state_changed_cb(__wifi_conn_changed_cb, (void *)pidx);
+		if (WIFI_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to set wifi state changed cb");
+			__show_progress_popup(true, "Network ERROR - Check wifi connection");
+			wifi_deinitialize();
+			return;
+		}
+
+		int download_id;
+		ret = download_create(&download_id);
+		if (DOWNLOAD_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to download create(%d)", ret);
+			__show_progress_popup(true, NULL);
+			wifi_deinitialize();
+			return;
+		}
+
+		ret = download_set_network_type(download_id, DOWNLOAD_NETWORK_WIFI);
+		if (DOWNLOAD_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to set network type(%d)", ret);
+			__show_progress_popup(true, "Network ERROR - Check wifi connection");
 			download_destroy(download_id);
+			wifi_deinitialize();
+			return;
+		}
+
+		ret = download_set_state_changed_cb(download_id, __download_state_changed_cb, (void *)pidx);
+		if (DOWNLOAD_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to set state cb(%d)", ret);
+			__show_progress_popup(true, NULL);
+			download_destroy(download_id);
+			wifi_deinitialize();
 			return;
 		}
 
 		char url[1024] = {'\0',};
 		snprintf(url, 1024, "http://download.tizen.org/releases/resources/voice/tts/smt-language-pack/%s.tar.gz", item_data[idx][2]);
-		error = download_set_url(download_id, url);
-		if (DOWNLOAD_ERROR_NONE != error) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] set url");
-			__show_progress_popup(true);
+		ret = download_set_url(download_id, url);
+		if (DOWNLOAD_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to set url(%d)", ret);
+			__show_progress_popup(true, NULL);
 			download_destroy(download_id);
+			wifi_deinitialize();
 			return;
 		}
 
 		//char *data_path = app_get_data_path();
 		const char *data_path = TTS_ENGINE_DATA_PATH;
-		error = download_set_destination(download_id, data_path);
-		if (DOWNLOAD_ERROR_NONE != error) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] set destination");
-			__show_progress_popup(true);
+		ret = download_set_destination(download_id, data_path);
+		if (DOWNLOAD_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to set destination(%d)", ret);
+			__show_progress_popup(true, NULL);
 			download_destroy(download_id);
+			wifi_deinitialize();
 			return;
 		}
 		//free(data_path);
 
-		error = download_start(download_id);
-		if (DOWNLOAD_ERROR_NONE != error) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] start");
-			__show_progress_popup(true);
+		ret = download_start(download_id);
+		if (DOWNLOAD_ERROR_NONE != ret) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to start(%d)", ret);
+			__show_progress_popup(true, NULL);
 			download_destroy(download_id);
+			wifi_deinitialize();
 			return;
 		}
 
-		__show_progress_popup(false);
-
+		g_download_id = download_id;
+		__show_progress_popup(false, NULL);
+		
 		dlog_print(DLOG_INFO, LOG_TAG, "<< End >>");
 	} else {
 		dlog_print(DLOG_INFO, LOG_TAG, ">> Delete <<");
