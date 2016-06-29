@@ -27,6 +27,7 @@ extern "C" {
 #include <dlog.h>
 #include <download.h>
 #include <libxml/parser.h>
+#include <wifi.h>
 #include <tzplatform_config.h>
 
 #ifdef LOG_TAG
