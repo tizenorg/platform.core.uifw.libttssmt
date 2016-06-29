@@ -6,6 +6,7 @@ INCLUDE(FindPkgConfig)
 pkg_check_modules(pkgs_setting REQUIRED 
 	appcore-efl elementary ecore-imf eina ecore ecore-input evas edje glib-2.0
 	capi-base-common aul capi-appfw-application efl-extension vconf vconf-internal-keys capi-web-url-download libxml-2.0
+        capi-network-wifi
 )
 
 FOREACH(flag ${pkgs_setting_CFLAGS})
