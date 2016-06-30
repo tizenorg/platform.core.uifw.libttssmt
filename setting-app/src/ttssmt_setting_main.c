@@ -584,7 +584,8 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 		wifi_connection_state_e state;
 		ret = wifi_get_connection_state(&state);
 		if (WIFI_ERROR_NONE != ret) {
-			__show_progress_popup(true, "Network ERROR - Check wifi connection(%d)", ret);
+			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to get wifi state(%d)", ret);
+			__show_progress_popup(true, "Network ERROR - Check wifi connection");
 			wifi_deinitialize();
 			return;
 		}
