@@ -1,0 +1,17 @@
+msgid "IDS_VC_BODY_AUTOMATIC"
+msgstr "Automático"
+
+msgid "IDS_ST_HEADER_SPEECH_RATE_ABB"
+msgstr "Índice de velocidad"
+
+msgid "IDS_ST_OPT_LANGUAGE"
+msgstr "Idioma"
+
+msgid "IDS_VOICE_BODY_VOICE_CONTROL_ABB2"
+msgstr "Control de voz"
+
+msgid "IDS_ST_BODY_TTS"
+msgstr "TTS"
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Engine settings"

@@ -1,0 +1,17 @@
+msgid "IDS_VC_BODY_AUTOMATIC"
+msgstr "Automaatne"
+
+msgid "IDS_ST_HEADER_SPEECH_RATE_ABB"
+msgstr "Kõne kiirus"
+
+msgid "IDS_ST_OPT_LANGUAGE"
+msgstr "Keel"
+
+msgid "IDS_VOICE_BODY_VOICE_CONTROL_ABB2"
+msgstr "Hääljuhtimine"
+
+msgid "IDS_ST_BODY_TTS"
+msgstr "TTS"
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Mootoriseaded"

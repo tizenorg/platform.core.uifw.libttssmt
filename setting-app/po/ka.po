@@ -1,0 +1,17 @@
+msgid "IDS_VC_BODY_AUTOMATIC"
+msgstr "ავტომატური"
+
+msgid "IDS_ST_HEADER_SPEECH_RATE_ABB"
+msgstr "საუბრის სიჩქარე"
+
+msgid "IDS_ST_OPT_LANGUAGE"
+msgstr "ენა"
+
+msgid "IDS_VOICE_BODY_VOICE_CONTROL_ABB2"
+msgstr "ხმოვანი ბრძანებით მართვა"
+
+msgid "IDS_ST_BODY_TTS"
+msgstr "TTS"
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "მექანიზმის პარამეტრები"

@@ -1,0 +1,17 @@
+msgid "IDS_VC_BODY_AUTOMATIC"
+msgstr "ಸ್ವಯಂಚಾಲಿತವಾಗಿ"
+
+msgid "IDS_ST_HEADER_SPEECH_RATE_ABB"
+msgstr "ಭಾಷಣ ದರ"
+
+msgid "IDS_ST_OPT_LANGUAGE"
+msgstr "ಭಾಷೆ"
+
+msgid "IDS_VOICE_BODY_VOICE_CONTROL_ABB2"
+msgstr "ಧ್ವನಿ ನಿಯಂತ್ರಣ"
+
+msgid "IDS_ST_BODY_TTS"
+msgstr "TTS"
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "ಎಂಜಿನ್ ಸಂಯೋಜನೆಗಳು"

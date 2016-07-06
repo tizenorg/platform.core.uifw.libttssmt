@@ -1,0 +1,17 @@
+msgid "IDS_VC_BODY_AUTOMATIC"
+msgstr "Автоматты түрде"
+
+msgid "IDS_ST_HEADER_SPEECH_RATE_ABB"
+msgstr "Сөйлеу жылдамдығы"
+
+msgid "IDS_ST_OPT_LANGUAGE"
+msgstr "Тіл"
+
+msgid "IDS_VOICE_BODY_VOICE_CONTROL_ABB2"
+msgstr "Дауыспен басқару"
+
+msgid "IDS_ST_BODY_TTS"
+msgstr "TTS"
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Механизм параметрлері"
