@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "ڈاؤن لوڈ کریں"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "نیٹ ورک کی غلطی۔"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "ڈاونلوڈ مجود نہیں۔"
+
+msgid "IDS_DOWNLOADING"
+msgstr "ڈاؤن لوڈ ہو رہا ہے..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "انجن سیٹنگز"

@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Преземи"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Грешка во мрежата."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Неуспешно преземање."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Се презема..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Поставувања за погонот"

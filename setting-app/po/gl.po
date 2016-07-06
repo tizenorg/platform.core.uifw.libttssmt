@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Descargar"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Erro de rede"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Erro de descarga"
+
+msgid "IDS_DOWNLOADING"
+msgstr "Descargando..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Axustes do motor"

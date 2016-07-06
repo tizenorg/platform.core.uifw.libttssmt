@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "డౌన్‌లోడ్‌ చేయి"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "నెట్వర్క్ లోపం."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "డౌన్లోడ్ అలభ్యం."
+
+msgid "IDS_DOWNLOADING"
+msgstr "డౌన్‌లోడ్ అవుతోంది..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "ఇంజిన్ సెట్టింగ్‌లు"

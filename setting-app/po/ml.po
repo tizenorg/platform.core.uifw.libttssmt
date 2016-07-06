@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "ഡൗണ്‍‌ലോഡ്"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "നെറ്റ്‌വര്‍ക്ക് പിശക്."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "ഡൗണ്‍‌ലോഡ് ലഭ്യമല്ല."
+
+msgid "IDS_DOWNLOADING"
+msgstr "ഡൗൺലോഡ് ചെ...."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "എൻജിൻ ക്രമീകരണങ്ങൾ"

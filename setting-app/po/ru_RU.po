@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Загрузить"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Ошибка сети."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Загрузка невозможна."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Загрузка..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Параметры модуля"

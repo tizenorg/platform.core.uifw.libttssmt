@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Skini"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Greška mreže."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Skidanje neuspješno."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Preuzimanje..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Postavke modula"

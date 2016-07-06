@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Stáhnout"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Chyba sítě."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Stažení se nezdařilo."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Stahování..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Nastavení modulu"

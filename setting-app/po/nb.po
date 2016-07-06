@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Last ned"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Nettverksfeil."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Nedlasting mislyktes."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Laster ned..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Motorinnstillinger"

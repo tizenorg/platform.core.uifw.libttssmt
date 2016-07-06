@@ -196,6 +196,22 @@ bool plugin_NeedAppCredential(void)
 	return false;
 }
 
+int plugin_SetPrivateData(const char* key, const char* data)
+{
+	return 0;
+}
+
+int plugin_GetPrivateData(const char* key, char** data)
+{
+	if (NULL != key) {
+		if (!strcmp(key, "version")) {
+			*data = strdup("1.0");
+		}
+	}
+
+	return 0;
+}
+
 void plugin_SetDaemonAPIs(ttspd_funcs_s const * pAPIs)
 {
 	gpDaemonAPIs = pAPIs;

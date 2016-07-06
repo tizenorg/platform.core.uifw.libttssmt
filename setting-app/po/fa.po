@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "دانلود"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "خطا در شبکه رخ داد."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "امکان دانلود وجود ندارد."
+
+msgid "IDS_DOWNLOADING"
+msgstr "دانلود..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "تنظیمات موتور"

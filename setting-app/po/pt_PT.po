@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Transferir"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Erro da rede."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Falha na transferência."
+
+msgid "IDS_DOWNLOADING"
+msgstr "A transferir..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Definições de motor"

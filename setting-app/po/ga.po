@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Íoslódáil"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Earráid líonra."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Theip ar íoslódáil."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Íoslódáil..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Socruithe innill"

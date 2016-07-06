@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Atsisiųsti"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Tinklo klaida."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Atsisiųsti nepavyko."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Atsisiunčia..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Sistemos nustatymai"

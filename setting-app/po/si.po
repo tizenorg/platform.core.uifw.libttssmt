@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "බාගන්න"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "ජාල දෝෂයකි."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "බාගැනීම අසාර්ථකයි."
+
+msgid "IDS_DOWNLOADING"
+msgstr "බාගනිමින්..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "යන්ත්‍ර සැකසුම්"

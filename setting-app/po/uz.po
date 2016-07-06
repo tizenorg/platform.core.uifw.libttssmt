@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Yuklab olish"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Tarmoq xatosi."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Yuklash bajarilmadi."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Yuklanmoqda..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Mexanizm parametrlari"

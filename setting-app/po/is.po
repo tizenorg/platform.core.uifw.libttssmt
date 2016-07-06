@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Sækja"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Netvilla."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Það er ekki hægt að hlaða niður."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Sæki..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Stillingar vélar"

@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "הורד"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "שגיאת רשת."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "ההורדה לא זמינה."
+
+msgid "IDS_DOWNLOADING"
+msgstr "מוריד..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "הגדרות מנגנון"

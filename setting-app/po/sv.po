@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Hämta"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Nätverksfel."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Hämtning misslyckades."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Hämtar ..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Motorinställningar"

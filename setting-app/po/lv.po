@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Lejupielādēt"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Tīkla kļūda."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Lejupielāde neizdevās."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Lejupielādē..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Programmas iestatījumi"

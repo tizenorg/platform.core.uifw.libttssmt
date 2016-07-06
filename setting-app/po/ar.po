@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "تنزيل"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "حدث خطأ في الشبكة."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "فشل في التنزيل."
+
+msgid "IDS_DOWNLOADING"
+msgstr "جارٍ التنزيل..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "إعدادات المحرك"

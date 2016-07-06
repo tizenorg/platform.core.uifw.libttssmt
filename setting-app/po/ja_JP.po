@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "ダウンロード"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "ネットワークエラーが発生しました。"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "ダウンロードに失敗しました。"
+
+msgid "IDS_DOWNLOADING"
+msgstr "ﾀﾞｳﾝﾛｰﾄﾞ中..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "エンジン設定"

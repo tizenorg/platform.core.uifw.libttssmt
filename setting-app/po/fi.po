@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Lataa"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Verkkovirhe"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Lataus epäonnistui."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Ladataan..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Moduulin asetukset"

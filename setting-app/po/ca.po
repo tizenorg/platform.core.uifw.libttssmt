@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Descarregar"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Error de xarxa"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Descàrrega no disponible"
+
+msgid "IDS_DOWNLOADING"
+msgstr "Descarreg…"
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Ajustaments de motor"

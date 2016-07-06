@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Download"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Netv©¡rksfejl."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Download mislykkedes."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Downloader ..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Motorindstillinger"

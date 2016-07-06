@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "下载"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "网络故障."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "下载失败."
+
+msgid "IDS_DOWNLOADING"
+msgstr "正在下载..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "引擎设置"

@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "İndir"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Şebeke hatalı."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "İndirme başarısız."
+
+msgid "IDS_DOWNLOADING"
+msgstr "İndiriliyor..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Motor ayarları"

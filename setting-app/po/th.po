@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "ดาวน์โหลด"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "เครือข่ายผิดพลาด"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "ไม่​มี​ดาวน์​โหลด"
+
+msgid "IDS_DOWNLOADING"
+msgstr "กำลังดาวน์โหลด..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "การตั้งค่าเครื่องมือ"

@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "ჩამოტვირთვა"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "ქსელის შეცდომა."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "ვერ ჩამოიტვირთა."
+
+msgid "IDS_DOWNLOADING"
+msgstr "ჩამოტვირთვა..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "მექანიზმის პარამეტრები"

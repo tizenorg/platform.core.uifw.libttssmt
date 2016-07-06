@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Изтегляне"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Грешка на мрежата."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Неуспешно изтегляне."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Изтегляне..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Настройки на ядро"

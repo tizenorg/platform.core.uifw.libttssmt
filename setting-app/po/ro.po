@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Descărcare"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Eroare rețea"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Descărcare eșuată"
+
+msgid "IDS_DOWNLOADING"
+msgstr "Se descarcă…"
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Setări motor"

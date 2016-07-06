@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Λήψη"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Σφάλμα δικτύου."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Αποτυχία λήψης."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Λήψη..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Ρυθμίσεις μηχανής"

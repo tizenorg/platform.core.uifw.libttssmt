@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Yüklə"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Şəbəkə xətası."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Yükləmə mümkün olmadı."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Yüklənir..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Mexanizmin parametrləri"

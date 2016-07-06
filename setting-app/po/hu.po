@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Letöltés"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Hálózati hiba"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Sikertelen letöltés"
+
+msgid "IDS_DOWNLOADING"
+msgstr "Letöltés..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Modul beállításai"

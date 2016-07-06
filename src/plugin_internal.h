@@ -68,6 +68,10 @@ int plugin_UnloadVoice(const char* language, int type);
 
 bool plugin_NeedAppCredential(void);
 
+int plugin_SetPrivateData(const char* key, const char* data);
+
+int plugin_GetPrivateData(const char* key, char** data);
+
 void plugin_SetDaemonAPIs (ttspd_funcs_s const * pAPIs);
 
 

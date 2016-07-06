@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "다운로드"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "네트워크 오류가 발생하였습니다."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "다운로드하지 못하였습니다."
+
+msgid "IDS_DOWNLOADING"
+msgstr "다운로드 중..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "엔진 설정"

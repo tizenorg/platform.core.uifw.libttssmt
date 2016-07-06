@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "ಡೌನ್‌ಲೋಡ್"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "ನೆಟ್‌ವರ್ಕ್‌ ತಪ್ಪು."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "ಡೌನಲೋಡ್ ಲಬ್ಯವಿರುವದಿಲ್ಲ."
+
+msgid "IDS_DOWNLOADING"
+msgstr "ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "ಎಂಜಿನ್ ಸಂಯೋಜನೆಗಳು"

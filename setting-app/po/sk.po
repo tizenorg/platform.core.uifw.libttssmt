@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Stiahnuť"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Chyba siete."
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Stiahnutie nedostupné."
+
+msgid "IDS_DOWNLOADING"
+msgstr "Sťahuje sa..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Nastavenia nástroja"

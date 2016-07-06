@@ -1,0 +1,14 @@
+msgid "IDS_DOWNLOAD"
+msgstr "Deskargatu"
+
+msgid "IDS_NETWORK_ERROR"
+msgstr "Sarearen errorea"
+
+msgid "IDS_DOWNLOAD_FAILED"
+msgstr "Deskarga ez dago eskuragarri"
+
+msgid "IDS_DOWNLOADING"
+msgstr "Deskargatzen..."
+
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "Motor ezarpenak"

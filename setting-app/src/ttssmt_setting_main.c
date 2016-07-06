@@ -75,8 +75,10 @@ typedef enum {
 } item_index_e;
 
 /* Todo - update language name */
+#define TEXT_DOWNLOAD _("IDS_DOWNLOAD")
+
 static char* item_data[END_INDEX][5] = {
-	{"Download (via network)", "", "", "", ""},
+	{"", "", "", "", ""},
 	{"\xC4\x8C\x65\xC5\xA1\x74\x69\x6e\x61 - \xC5\xBD\x65\x6e\x61", "cs_CZ_Female", "libttssmt-cs_CZ_Female", "cs_CZ", "Female"},
 	{"Dansk - Kvinde", "da_DK_Female", "libttssmt-da_DK_Female", "da_DK", "Famale"},
 	{"\x44\x65\x75\x74\x73\x63\x68 - Weiblich", "de_DE_Female", "libttssmt-de_DE_Female", "de_DE", "Female"},
@@ -132,6 +134,8 @@ static char* item_data[END_INDEX][5] = {
 #define TTS_ENGINE_INFO	tzplatform_mkpath(TZ_USER_HOME, "/share/.voice/tts/engine-info/ttssmt-info.xml")
 
 #define TTS_ENGINE_DATA_PATH tzplatform_mkpath(TZ_USER_HOME, "/share/.voice/tts/engine-info/")
+
+#define TTS_ENGINE_PO_PATH tzplatform_mkpath(TZ_SYS_RO_APP, "/org.tizen.ttssmt-setting/res/locale/")
 
 static Elm_Genlist_Item_Class *g_itc_group_title = NULL;
 static Elm_Genlist_Item_Class *g_itc_button_1line = NULL;
@@ -295,7 +299,11 @@ static char * __genlist_text_get(void *data, Evas_Object *obj, const char *part)
 	item_index_e idx = (item_index_e)data;
 
 	if (!strcmp("elm.text", part)) {
-		return strdup(item_data[idx][0]);
+		if (0 == idx) {
+			return strdup(_("IDS_DOWNLOAD"));
+		} else {
+			return strdup(item_data[idx][0]);
+		}
 	}
 
 	return NULL;
@@ -384,13 +392,13 @@ static void __show_progress_popup(bool failed, const char* msg)
 	Evas_Object *popup = elm_popup_add(g_ad->win);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_object_part_text_set(popup, "title,text", "Downloading");
+	elm_object_part_text_set(popup, "title,text", _("IDS_DOWNLOADING"));
 
 	if (failed) {
 		if (NULL != msg) {
 			elm_object_part_text_set(popup, "default", msg);
 		} else {
-			elm_object_part_text_set(popup, "default", "Fail to download language pack.");
+			elm_object_part_text_set(popup, "default", _("IDS_DOWNLOAD_FAILED"));
 		}
 		elm_popup_timeout_set(popup, 2.0);
 
@@ -554,7 +562,7 @@ static void __wifi_conn_changed_cb(wifi_connection_state_e state, wifi_ap_h ap, 
 		if (DOWNLOAD_ERROR_NONE != ret) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to download cancel(%d)", ret);
 		}
-		__show_progress_popup(true, "Network ERROR - Check wifi connection");
+		__show_progress_popup(true, _("IDS_NETWORK_ERROR"));
 	}
 }
 
@@ -585,14 +593,14 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 		ret = wifi_get_connection_state(&state);
 		if (WIFI_ERROR_NONE != ret) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to get wifi state(%d)", ret);
-			__show_progress_popup(true, "Network ERROR - Check wifi connection");
+			__show_progress_popup(true, _("IDS_NETWORK_ERROR"));
 			wifi_deinitialize();
 			return;
 		}
 
 		if (WIFI_CONNECTION_STATE_CONNECTED != state) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "Wifi Disconnected");
-			__show_progress_popup(true, "Network ERROR - Check wifi connection");
+			__show_progress_popup(true, _("IDS_NETWORK_ERROR"));
 			wifi_deinitialize();
 			return;
 		}
@@ -600,7 +608,7 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 		ret = wifi_set_connection_state_changed_cb(__wifi_conn_changed_cb, (void *)pidx);
 		if (WIFI_ERROR_NONE != ret) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to set wifi state changed cb(%d)", ret);
-			__show_progress_popup(true, "Network ERROR - Check wifi connection");
+			__show_progress_popup(true, _("IDS_NETWORK_ERROR"));
 			wifi_deinitialize();
 			return;
 		}
@@ -617,7 +625,7 @@ static void __lang_item_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 		ret = download_set_network_type(download_id, DOWNLOAD_NETWORK_WIFI);
 		if (DOWNLOAD_ERROR_NONE != ret) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "[ERROR] Fail to set network type(%d)", ret);
-			__show_progress_popup(true, "Network ERROR - Check wifi connection");
+			__show_progress_popup(true, _("IDS_NETWORK_ERROR"));
 			download_destroy(download_id);
 			wifi_deinitialize();
 			return;
@@ -753,6 +761,10 @@ static Eina_Bool __naviframe_item_pop_cb(void *data, Elm_Object_Item *it)
 static void create_base_gui(appdata_s *ad)
 {
 	g_ad = ad;
+
+	bindtextdomain("org.tizen.ttssmt-setting", TTS_ENGINE_PO_PATH);
+	textdomain("org.tizen.ttssmt-setting");
+
 	/* Window */
 	ad->win = elm_win_util_standard_add("org.tizen.ttssmt-setting", "org.tizen.ttssmt-setting");
 	elm_win_autodel_set(ad->win, EINA_TRUE);
@@ -780,7 +792,7 @@ static void create_base_gui(appdata_s *ad)
 
 	/* Contents */
 	create_contents(ad);
-	Elm_Object_Item *main_item = elm_naviframe_item_push(ad->naviframe, "Engine setting", NULL, NULL, ad->genlist, NULL);
+	Elm_Object_Item *main_item = elm_naviframe_item_push(ad->naviframe, _("IDS_VOICE_BODY_ENGINE_SETTINGS"), NULL, NULL, ad->genlist, NULL);
 	elm_naviframe_item_title_enabled_set(main_item, EINA_TRUE, EINA_TRUE);
 	elm_naviframe_item_pop_cb_set(main_item, __naviframe_item_pop_cb, ad);
 	elm_object_content_set(ad->conform, ad->naviframe);
