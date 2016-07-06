@@ -133,6 +133,8 @@ static char* item_data[END_INDEX][5] = {
 
 #define TTS_ENGINE_DATA_PATH tzplatform_mkpath(TZ_USER_HOME, "/share/.voice/tts/engine-info/")
 
+#define TTS_ENGINE_PO_PATH tzplatform_mkpath(TZ_SYS_RO_APP, "/org.tizen.ttssmt-setting/res/locale/")
+
 static Elm_Genlist_Item_Class *g_itc_group_title = NULL;
 static Elm_Genlist_Item_Class *g_itc_button_1line = NULL;
 
@@ -753,6 +755,10 @@ static Eina_Bool __naviframe_item_pop_cb(void *data, Elm_Object_Item *it)
 static void create_base_gui(appdata_s *ad)
 {
 	g_ad = ad;
+
+	bindtextdomain("org.tizen.ttssmt-setting", TTS_ENGINE_PO_PATH);
+	textdomain("org.tizen.ttssmt-setting");
+
 	/* Window */
 	ad->win = elm_win_util_standard_add("org.tizen.ttssmt-setting", "org.tizen.ttssmt-setting");
 	elm_win_autodel_set(ad->win, EINA_TRUE);
@@ -780,7 +786,7 @@ static void create_base_gui(appdata_s *ad)
 
 	/* Contents */
 	create_contents(ad);
-	Elm_Object_Item *main_item = elm_naviframe_item_push(ad->naviframe, "Engine setting", NULL, NULL, ad->genlist, NULL);
+	Elm_Object_Item *main_item = elm_naviframe_item_push(ad->naviframe, _("IDS_VOICE_BODY_ENGINE_SETTINGS"), NULL, NULL, ad->genlist, NULL);
 	elm_naviframe_item_title_enabled_set(main_item, EINA_TRUE, EINA_TRUE);
 	elm_naviframe_item_pop_cb_set(main_item, __naviframe_item_pop_cb, ad);
 	elm_object_content_set(ad->conform, ad->naviframe);

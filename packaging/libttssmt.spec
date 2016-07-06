@@ -7,6 +7,7 @@ License:    Flora-1.1
 Source0:    %{name}-%{version}.tar.gz
 Source1001: 	libttssmt.manifest
 BuildRequires:  cmake
+BuildRequires:  gettext-tools
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(libtzplatform-config)
@@ -60,3 +61,4 @@ cp %{_builddir}/%{name}-%{version}/LICENSE.Flora %{buildroot}%{TZ_SYS_RO_SHARE}/
 %{TZ_SYS_RO_SHARE}/license/%{name}
 %{TZ_SYS_RO_APP}/org.tizen.ttssmt-setting/bin/ttssmt-setting
 %{TZ_SYS_RO_PACKAGES}/org.tizen.ttssmt-setting.xml
+%{TZ_SYS_RO_APP}/org.tizen.ttssmt-setting/res/locale/*
