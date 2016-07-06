@@ -753,6 +753,10 @@ static Eina_Bool __naviframe_item_pop_cb(void *data, Elm_Object_Item *it)
 static void create_base_gui(appdata_s *ad)
 {
 	g_ad = ad;
+
+    bindtextdomain("org.tizen.ttssmt-setting", "/usr/apps/org.tizen.ttssmt-setting/res/locale/");
+    textdomain("org.tizen.ttssmt-setting");
+
 	/* Window */
 	ad->win = elm_win_util_standard_add("org.tizen.ttssmt-setting", "org.tizen.ttssmt-setting");
 	elm_win_autodel_set(ad->win, EINA_TRUE);
@@ -780,7 +784,7 @@ static void create_base_gui(appdata_s *ad)
 
 	/* Contents */
 	create_contents(ad);
-	Elm_Object_Item *main_item = elm_naviframe_item_push(ad->naviframe, "Engine setting", NULL, NULL, ad->genlist, NULL);
+	Elm_Object_Item *main_item = elm_naviframe_item_push(ad->naviframe, _("IDS_VOICE_BODY_ENGINE_SETTINGS"), NULL, NULL, ad->genlist, NULL);
 	elm_naviframe_item_title_enabled_set(main_item, EINA_TRUE, EINA_TRUE);
 	elm_naviframe_item_pop_cb_set(main_item, __naviframe_item_pop_cb, ad);
 	elm_object_content_set(ad->conform, ad->naviframe);

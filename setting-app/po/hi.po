@@ -1,0 +1,2 @@
+msgid "IDS_VOICE_BODY_ENGINE_SETTINGS"
+msgstr "इंजन सेटिंग्स"
