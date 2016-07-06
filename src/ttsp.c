@@ -56,7 +56,10 @@ int ttsp_load_engine(ttspd_funcs_s* pdfuncs, ttspe_funcs_s* pefuncs)
   pefuncs->load_voice	     = plugin_LoadVoice;
   pefuncs->unload_voice	     = plugin_UnloadVoice;
 
-  pefuncs->need_app_credential = plugin_NeedAppCredential;
+  pefuncs->need_app_credential	= plugin_NeedAppCredential;
+
+  pefuncs->set_private_data	= plugin_SetPrivateData;
+  pefuncs->get_private_data	= plugin_GetPrivateData;
 
   plugin_SetDaemonAPIs(pdfuncs);
 
